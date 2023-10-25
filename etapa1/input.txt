@@ -1,0 +1,27 @@
+code int a = 10;
+float b = 3.14;
+if (a == 10 && b > 3.0) {
+    print("a is 10 and b is greater than 3.0");
+} else { 01a _1 _a a_
+    print("a is not 10 or/// b is not greater \\\ than 3.0");
+}
+'[' ']' '(' ')'
+'a' '2'
+_
+
+// teste comentario
+
+
+/// comentario multiple
+
+int 
+float
+
+id
+print
+
+\\\
+!=
+
+
+2211.0412
