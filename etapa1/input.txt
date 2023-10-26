@@ -1,16 +1,9 @@
 code int a = 10;
 float b = 3.14;
-if (a == 10 && b > 3.0) {
-    print("a is 10 and b i
-
-
-
-
-
-
-    s greater than 3.0");
+if (a == 55 && b > 2.1) {
+  print("primeiro print");
 } else { 01a _1 _a a_
-    print("a is not 10 or/// b is not greater \\\ than 3.0");
+    print("segundo print");
 }
 '[' ']' '(' ')'
 'a' '2'

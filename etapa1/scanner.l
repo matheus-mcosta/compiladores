@@ -1,6 +1,14 @@
+/* Matheus de Moraes Costa 00297121
+ */
 %{
 #include "tokens.h"
 #include "hash.c"
+
+#define INTEGER 1
+#define REAL 2
+#define CHAR 3
+#define STRING 4
+#define IDENTIFIER 5
 
 int Running=1;
 int LineNumber=1;
@@ -43,11 +51,11 @@ CHAR \'[-=,;(){}[\]<>+*/%&|~a-zA-Z0-9]\'
 {SPECIAL_CHAR}       { return yytext[0]; }
 
 
-{ID}                 { hashInsert(yytext, TK_IDENTIFIER); return TK_IDENTIFIER; }
-{DIGIT}              { hashInsert(yytext, LIT_INT); return LIT_INT; }
-{DIGIT}\.{DIGIT}     { hashInsert(yytext, LIT_REAL); return LIT_REAL; }
-{CHAR}               { hashInsert(yytext, LIT_CHAR); return LIT_CHAR; }
-{STRING}             { hashInsert(yytext, LIT_STRING); return LIT_STRING; }
+{ID}                 { hashInsert(yytext, IDENTIFIER); return TK_IDENTIFIER; }
+{DIGIT}              { hashInsert(yytext, INTEGER); return LIT_INT; }
+{DIGIT}\.{DIGIT}     { hashInsert(yytext, REAL); return LIT_REAL; }
+{CHAR}               { hashInsert(yytext, CHAR); return LIT_CHAR; }
+{STRING}             { hashInsert(yytext, STRING); return LIT_STRING; }
 {WHITESPACE}         { }
 " "                  { }
 
