@@ -14,7 +14,6 @@ int isRunning(void);
 void initMe(void);
 
 int main(int argc, char **argv) {
-  int token = 0;
   fprintf(stderr, "Rodando main Matheus. \n");
 
   if (argc < 2) {

@@ -1,3 +1,8 @@
+%{
+int getLineNumber();
+void yyerror(const char *s);
+
+%}
 
 %token KW_CHAR
 %token KW_INT
@@ -156,6 +161,7 @@ vector: TK_IDENTIFIER '[' LIT_INT ']'
       ;
 
 %%
+
 
 void yyerror(const char *s) {
     fprintf(stderr, "Syntax error at line %d.", getLineNumber());

@@ -114,6 +114,11 @@
 
 
 /* Copy the first part of user declarations.  */
+#line 1 "parser.y"
+
+int getLineNumber();
+void yyerror(const char *s);
+
 
 
 /* Enabling traces.  */
@@ -147,7 +152,7 @@ typedef int YYSTYPE;
 
 
 /* Line 216 of yacc.c.  */
-#line 151 "y.tab.c"
+#line 156 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -461,14 +466,14 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    34,    34,    37,    41,    41,    43,    44,    45,    46,
-      49,    50,    51,    54,    57,    60,    63,    64,    67,    68,
-      71,    72,    73,    76,    79,    80,    83,    84,    85,    88,
-      89,    94,    95,    98,    99,   102,   103,   104,   105,   106,
-     107,   108,   109,   112,   113,   116,   117,   120,   123,   124,
-     127,   130,   134,   135,   136,   137,   138,   139,   140,   141,
-     142,   143,   144,   145,   146,   147,   148,   149,   150,   151,
-     152,   155
+       0,    39,    39,    42,    46,    46,    48,    49,    50,    51,
+      54,    55,    56,    59,    62,    65,    68,    69,    72,    73,
+      76,    77,    78,    81,    84,    85,    88,    89,    90,    93,
+      94,    99,   100,   103,   104,   107,   108,   109,   110,   111,
+     112,   113,   114,   117,   118,   121,   122,   125,   128,   129,
+     132,   135,   139,   140,   141,   142,   143,   144,   145,   146,
+     147,   148,   149,   150,   151,   152,   153,   154,   155,   156,
+     157,   160
 };
 #endif
 
@@ -1495,7 +1500,7 @@ yyreduce:
     {
       
 /* Line 1267 of yacc.c.  */
-#line 1499 "y.tab.c"
+#line 1504 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1709,7 +1714,8 @@ yyreturn:
 }
 
 
-#line 158 "parser.y"
+#line 163 "parser.y"
+
 
 
 void yyerror(const char *s) {
