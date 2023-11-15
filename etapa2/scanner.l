@@ -1,8 +1,7 @@
 /* Matheus de Moraes Costa 00297121
  */
 %{
-#include "y.tab.h"
-#include "hash.c"
+#include "y.tab.c"
 
 #define SYMBOL_LIT_INT 1
 #define SYMBOL_LIT_REAL 2
@@ -51,11 +50,11 @@ CHAR \'[-=,;(){}[\]<>+*/%&|~a-zA-Z0-9]\'
 {SPECIAL_CHAR}       { return yytext[0]; }
 
 
-{ID}                 { hashInsert(yytext, SYMBOL_IDENTIFIER); return TK_IDENTIFIER; }
-{DIGIT}              { hashInsert(yytext, SYMBOL_LIT_INT); return LIT_INT; }
-{DIGIT}\.{DIGIT}     { hashInsert(yytext, SYMBOL_LIT_REAL); return LIT_REAL; }
-{CHAR}               { hashInsert(yytext, SYMBOL_LIT_CHAR); return LIT_CHAR; }
-{STRING}             { hashInsert(yytext, SYMBOL_LIT_STRING); return LIT_STRING; }
+{ID}                 { yylval.symbol = hashInsert(yytext, SYMBOL_IDENTIFIER); return TK_IDENTIFIER; }
+{DIGIT}              { yylval.symbol = hashInsert(yytext, SYMBOL_LIT_INT); return LIT_INT; }
+{DIGIT}\.{DIGIT}     { yylval.symbol = hashInsert(yytext, SYMBOL_LIT_REAL); return LIT_REAL; }
+{CHAR}               { yylval.symbol = hashInsert(yytext, SYMBOL_LIT_CHAR); return LIT_CHAR; }
+{STRING}             { yylval.symbol = hashInsert(yytext, SYMBOL_LIT_STRING); return LIT_STRING; }
 {WHITESPACE}         { }
 " "                  { }
 
@@ -71,7 +70,6 @@ CHAR \'[-=,;(){}[\]<>+*/%&|~a-zA-Z0-9]\'
 
 %%
 
-#include "y.tab.c"
 #include "main.c"
 
 int getLineNumber(){

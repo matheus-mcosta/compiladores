@@ -1,6 +1,10 @@
 %{
+
+#include "hash.c"
+
 int getLineNumber();
 void yyerror(const char *s);
+extern int yylex();
 
 %}
 
@@ -34,6 +38,9 @@ void yyerror(const char *s);
 %left '&' '/' '|' '*' '-' '+' '<' '>' OPERATOR_DIF OPERATOR_EQ OPERATOR_GE OPERATOR_LE
 %right '~'
 
+%union {
+  HASH_NODE *symbol;
+}
 %%
 
 program: list
