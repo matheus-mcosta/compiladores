@@ -20,6 +20,13 @@ de multiplas
 linhas
 \\\
 
+///comentariooo\\\
+
+
+code function1
+  {
+  }
+
 code main
   {
   1a = 0;

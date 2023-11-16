@@ -8,7 +8,7 @@
 #
 
 etapa2: y.tab.c lex.yy.c
-	gcc -o etapa2 lex.yy.c
+	gcc -o etapa2 lex.yy.c -Wall
 y.tab.c: parser.y
 	yacc -d parser.y
 lex.yy.c: scanner.l

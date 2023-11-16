@@ -35,7 +35,13 @@ extern int yylex();
 
 %token TOKEN_ERROR
 
-%left '&' '/' '|' '*' '-' '+' '<' '>' OPERATOR_DIF OPERATOR_EQ OPERATOR_GE OPERATOR_LE
+%left '<' '>' '='
+%left '&' '|'
+%left OPERATOR_DIF OPERATOR_EQ
+%left OPERATOR_GE OPERATOR_LE
+%left '+' '-'
+%left '*' '/'
+
 %right '~'
 
 %union {
@@ -50,7 +56,9 @@ list : global_decl list_code
      ;
 
 
-global_decl: decl global_decl | decl
+global_decl: decl global_decl
+           |
+           ;
 
 decl: type TK_IDENTIFIER '=' value ';'
     | type TK_IDENTIFIER '[' LIT_INT ']' ';'
@@ -66,23 +74,30 @@ type: KW_INT
 func_decl: type TK_IDENTIFIER '(' param_list ')' ';'
          ;
 
-func_impl: KW_CODE TK_IDENTIFIER '{' list_cmd '}'
+func_impl: KW_CODE TK_IDENTIFIER cmd
     ;
 
 func_call: TK_IDENTIFIER '(' arg_list ')'
          ;
 
-arg_list: arg ',' arg_list
-          | arg
-          ;
+arg_list: arg arg_rest
+        |
+        ;
+
+arg_rest: ',' arg arg_rest
+        |
+        ;
 
 arg: TK_IDENTIFIER
      | value
      ;
 
-param_list: param ',' param_list
-          | param
-          | 
+param_list: param param_rest
+          |
+          ;
+
+param_rest: ',' param param_rest
+          |
           ;
 
 param: type TK_IDENTIFIER
@@ -98,24 +113,22 @@ value: LIT_INT
      ;
 
 list_code: func_impl list_code
-         | func_impl
+         |
          ;
 
 
 
 block: '{' list_cmd '}' 
-     | '{' '}'
      ;
 
 list_cmd: cmd list_cmd
-        | cmd
+        |
         ;
 
 cmd: attribute
    | if
    | while
    | print
-   | func_call
    | block
    | return
    | ';'
@@ -164,7 +177,7 @@ expr: value
     | vector
     ;
 
-vector: TK_IDENTIFIER '[' LIT_INT ']'
+vector: TK_IDENTIFIER '[' expr ']'
       ;
 
 %%
