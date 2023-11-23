@@ -88,7 +88,7 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 47 "parser.y"
+#line 48 "parser.y"
 {
   HASH_NODE *symbol;
 }

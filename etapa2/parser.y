@@ -4,7 +4,7 @@
 
 int getLineNumber();
 void yyerror(const char *s);
-extern int yylex();
+int yylex();
 
 %}
 
@@ -35,8 +35,9 @@ extern int yylex();
 
 %token TOKEN_ERROR
 
-%left '<' '>' '='
+
 %left '&' '|'
+%left '<' '>' '='
 %left OPERATOR_DIF OPERATOR_EQ
 %left OPERATOR_GE OPERATOR_LE
 %left '+' '-'
@@ -47,6 +48,7 @@ extern int yylex();
 %union {
   HASH_NODE *symbol;
 }
+
 %%
 
 program: list
@@ -59,6 +61,11 @@ list : global_decl list_code
 global_decl: decl global_decl
            |
            ;
+
+list_code: func_impl list_code
+         |
+         ;
+
 
 decl: type TK_IDENTIFIER '=' value ';'
     | type TK_IDENTIFIER '[' LIT_INT ']' ';'
@@ -80,17 +87,13 @@ func_impl: KW_CODE TK_IDENTIFIER cmd
 func_call: TK_IDENTIFIER '(' arg_list ')'
          ;
 
-arg_list: arg arg_rest
+arg_list: expr arg_rest
         |
         ;
 
-arg_rest: ',' arg arg_rest
+arg_rest: ',' expr arg_rest
         |
         ;
-
-arg: TK_IDENTIFIER
-     | value
-     ;
 
 param_list: param param_rest
           |
@@ -111,11 +114,6 @@ value: LIT_INT
      | LIT_REAL
      | LIT_CHAR
      ;
-
-list_code: func_impl list_code
-         |
-         ;
-
 
 
 block: '{' list_cmd '}' 

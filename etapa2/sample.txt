@@ -14,17 +14,9 @@ int a=0;
 int main();
 int incn (int x, int n );
 
-///
-Este eh um comentario 
-de multiplas 
-linhas
-\\\
-
-///comentariooo\\\
-
-
 code function1
   {
+    a = icn(1 + 1, b);
   }
 
 code main
