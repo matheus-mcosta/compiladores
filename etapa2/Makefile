@@ -16,3 +16,6 @@ lex.yy.c: scanner.l
 
 clean:
 	rm lex.yy.c y.tab.c y.tab.h etapa2
+
+put:
+	echo put ../entregas/etapa2.tgz | sftp mmcosta@html.inf.ufrgs.br:public_html/athiwtpuescmlrhs/
