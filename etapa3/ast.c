@@ -89,9 +89,6 @@ case AST_VECTORD2:
   case AST_DECL:
     fprintf(stderr, "AST_DECL, ");
     break;
-  case AST_TYPE:
-    fprintf(stderr, "AST_TYPE, ");
-    break;
   case AST_FUNC_DECL:
     fprintf(stderr, "AST_FUNC_DECL, ");
     break;
@@ -119,20 +116,13 @@ case AST_VECTORD2:
   case AST_VECTOR_PARAMS:
     fprintf(stderr, "AST_VECTOR_PARAMS, ");
     break;
-  case AST_VALUE:
-    fprintf(stderr, "AST_VALUE, ");
-    break;
   case AST_BLOCK:
     fprintf(stderr, "AST_BLOCK, ");
     break;
   case AST_LIST_CMD:
     fprintf(stderr, "AST_LIST_CMD, ");
     break;
-  case AST_CMD:
-    fprintf(stderr, "AST_CMD, ");
-    break;
   case AST_ATTRIBUTE:
-
     fprintf(stderr, "AST_ATTRIBUTE, ");
     break;
   case AST_IF:
@@ -164,3 +154,10 @@ case AST_VECTORD2:
   for (i = 0; i < MAX_SONS; ++i)
     astPrint(level + 1, node->son[i]);
 }
+
+
+
+void astDecompile(AST_NODE *root, FILE *out){
+    
+}
+

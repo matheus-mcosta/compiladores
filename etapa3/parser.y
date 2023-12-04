@@ -6,6 +6,9 @@ int getLineNumber();
 void yyerror(const char *s);
 int yylex();
 
+
+AST_NODE *root;
+
 %}
 
 %token KW_CHAR
@@ -82,7 +85,7 @@ int yylex();
 
 %%
 
-program: list           {$$=$1; astPrint(0,$1);}
+program: list           {root=$$; astPrint(0,root);}
         ;
 
 list : global_decl list_code {$$ = astCreate(AST_LIST, 0, $1, $2, 0, 0);}
@@ -213,5 +216,10 @@ vector: TK_IDENTIFIER '[' expr ']' {$$ = astCreate(AST_VECTOR, $1, $3, 0, 0, 0);
 void yyerror(const char *s) {
     fprintf(stderr, "Syntax error at line %d.", getLineNumber());
     exit(3);
+
+}
+
+AST_NODE *getAST() {
+    return root;
 }
 
