@@ -7,6 +7,7 @@
 // lex.yy.h
 int yylex();
 int yyparse();
+void astPrint(int level, int node);
 
 extern char *yytext;
 extern FILE *yyin;
@@ -30,6 +31,7 @@ int main(int argc, char **argv) {
 
   yyparse();
 
+  astPrint(0, 0);
   printf("Fim da compilacao com sucesso\n");
   exit(0);
 }

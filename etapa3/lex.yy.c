@@ -2007,7 +2007,7 @@ void initMe(){
 int yywrap(){
 	Running = 0;
   printLineNumber();
-  hashPrint();
+  // hashPrint();
 	return 1;
 }
 
