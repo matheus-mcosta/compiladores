@@ -43,15 +43,16 @@
 #define AST_ATTRIB_VEC 33
 #define AST_IF 34
 #define AST_IF_ELSE 35
-#define AST_WHILE 35
-#define AST_PRINT 36
-#define AST_RETURN 37
-#define AST_INPUT 38
-#define AST_PAREN 39
-#define AST_INT 40
-#define AST_FLOAT 41
-#define AST_CHAR 42
-#define AST_VECTOR 43
+#define AST_WHILE 36
+#define AST_PRINT 37
+#define AST_RETURN 38
+#define AST_INPUT 39
+#define AST_PAREN 40
+#define AST_INT 41
+#define AST_FLOAT 42
+#define AST_CHAR 43
+#define AST_VECTOR 44
+#define AST_SEMI 45
 
 typedef struct ast_node {
   int type;
@@ -63,6 +64,6 @@ AST_NODE *astCreate(int type, HASH_NODE *symbol, AST_NODE *s0, AST_NODE *s1,
                     AST_NODE *s2, AST_NODE *s3);
 void astPrint(int level, AST_NODE *node);
 
-void astDecompile(AST_NODE *root, FILE *out);
+void astDecompile(AST_NODE *node, FILE *out);
 
 #endif

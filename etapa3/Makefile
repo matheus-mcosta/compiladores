@@ -41,3 +41,9 @@ clean:
 
 put:
 	echo put ../entregas/etapa3.tgz | sftp mmcosta@html.inf.ufrgs.br:public_html/athiwtpuescmlrhs/
+
+run: etapa3
+	./etapa3 sample.txt out.txt 
+	./etapa3 out.txt out2.txt
+	diff out.txt out2.txt
+

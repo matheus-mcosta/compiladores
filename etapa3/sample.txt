@@ -1,5 +1,3 @@
-// UFRGS - Compiladores - Marcelo Johann - 2023/2
-
 char a=15;
 char x='x';
 char c='x';
@@ -63,7 +61,3 @@ code incn
   {
   return x + n;
   }
-
-// end of file
-  
-

@@ -1550,7 +1550,7 @@ yyreduce:
 
   case 9:
 #line 105 "parser.y"
-    {(yyval.ast) = astCreate(AST_VECTORD, (yyvsp[(2) - (6)].symbol), (yyvsp[(1) - (6)].ast), astCreate(AST_INT, (yyvsp[(4) - (6)].symbol), 0, 0, 0, 0), 0, 0);}
+    {(yyval.ast) = astCreate(AST_VECTORD, (yyvsp[(2) - (6)].symbol), (yyvsp[(1) - (6)].ast), astCreate(AST_SYMBOL, (yyvsp[(4) - (6)].symbol), 0, 0, 0, 0), 0, 0);}
     break;
 
   case 10:
@@ -1705,7 +1705,7 @@ yyreduce:
 
   case 40:
 #line 163 "parser.y"
-    {(yyval.ast) = 0;}
+    {(yyval.ast) = astCreate(AST_SEMI, 0,0,0,0,0);}
     break;
 
   case 41:

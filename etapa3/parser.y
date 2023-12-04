@@ -102,7 +102,7 @@ list_code: func_impl list_code {$$ = astCreate(AST_LIST_CODE, 0, $1, $2, 0, 0);}
 
 
 decl: type TK_IDENTIFIER '=' value ';' {$$ = astCreate(AST_DECL, $2, $1, $4, 0, 0);}
-    | type TK_IDENTIFIER '[' LIT_INT ']' ';' {$$ = astCreate(AST_VECTORD, $2, $1, astCreate(AST_INT, $4, 0, 0, 0, 0), 0, 0);}
+    | type TK_IDENTIFIER '[' LIT_INT ']' ';' {$$ = astCreate(AST_VECTORD, $2, $1, astCreate(AST_SYMBOL, $4, 0, 0, 0, 0), 0, 0);}
     | type TK_IDENTIFIER '[' LIT_INT ']'  vector_params ';' {$$ = astCreate(AST_VECTORD2, $2, $1, astCreate(AST_SYMBOL, $4, 0, 0, 0, 0), $6, 0);}
     | type TK_IDENTIFIER '(' param_list ')' ';'  {$$ = astCreate(AST_FUNC_DECL, $2, $1, $4, 0, 0);}
     ;
@@ -160,7 +160,7 @@ cmd: attribute {$$ = $1;}
    | print{$$ = $1;}
    | block{$$ = $1;}
    | return{$$ = $1;}
-   | ';' {$$ = 0;}
+   | ';' {$$ = astCreate(AST_SEMI, 0,0,0,0,0);}
    ;
 
 attribute: TK_IDENTIFIER '=' expr ';' {$$ = astCreate(AST_ATTRIBUTE, $1, $3, 0, 0, 0);}
