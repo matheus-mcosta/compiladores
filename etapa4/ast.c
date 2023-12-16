@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 AST_NODE *astCreate(int type, HASH_NODE *symbol, AST_NODE *son0, AST_NODE *son1,
-                    AST_NODE *son2, AST_NODE *son3) {
+                    AST_NODE *son2, AST_NODE *son3, int lineNumber) {
   AST_NODE *newNode;
   newNode = (AST_NODE *)calloc(1, sizeof(AST_NODE));
   newNode->type = type;
@@ -15,6 +15,7 @@ AST_NODE *astCreate(int type, HASH_NODE *symbol, AST_NODE *son0, AST_NODE *son1,
   newNode->son[1] = son1;
   newNode->son[2] = son2;
   newNode->son[3] = son3;
+  newNode->lineNumber = lineNumber;
   return newNode;
 }
 
@@ -140,7 +141,7 @@ void astPrint(int level, AST_NODE *node) {
   case AST_INPUT:
     fprintf(stderr, "AST_INPUT, ");
     break;
-    case AST_SEMI:
+  case AST_SEMI:
     fprintf(stderr, "AST_SEMI, ");
 
     // default:
@@ -387,7 +388,7 @@ void astDecompile(AST_NODE *node, FILE *out) {
     astDecompile(node->son[0], out);
     fprintf(out, "]");
     break;
-    case AST_SEMI:
+  case AST_SEMI:
     fprintf(out, ";\n");
     break;
   }

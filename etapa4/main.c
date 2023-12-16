@@ -37,7 +37,7 @@ if (0 == (out = fopen(argv[2], "w+"))) {
   initMe();
 
   yyparse();
-  astPrint(0, getAST());
+  // astPrint(0, getAST());
 
   astDecompile(getAST(), out);
   fclose(out);
