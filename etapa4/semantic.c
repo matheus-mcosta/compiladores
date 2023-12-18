@@ -172,7 +172,15 @@ void checkDeclaration() {
 
 void checkUse(AST_NODE *node) {}
 
-int checkVecElements(AST_NODE *node, int type) {}
+int checkVecElements(AST_NODE *node, int type) {
+  if (node != NULL) {
+    if (!isCompatible(node->son[0]->symbol->datatype, type))
+      return 0;
+    if (node->son[1] != NULL)
+      return checkVecElements(node->son[1], type);
+  }
+  return 1;
+}
 
 int isCompatible(int type1, int type2) {
   return (type1 == type2) || (isInt(type1) && isInt(type2));
