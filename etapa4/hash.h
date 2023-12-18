@@ -19,10 +19,12 @@
 #define SYMBOL_SCALAR 6
 #define SYMBOL_VECTOR 7
 #define SYMBOL_FUNCTION 8
+#define SYMBOL_PARAM 9
 
-#define DATATYPE_INT 9
-#define DATATYPE_REAL 10
-#define DATATYPE_CHAR 11
+#define DATATYPE_CHAR 10
+#define DATATYPE_INT 11
+#define DATATYPE_REAL 12
+#define DATATYPE_BOOL 13
 
 extern char *yytext;
 
