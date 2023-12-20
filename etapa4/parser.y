@@ -1,12 +1,14 @@
 %{
 
 #include "ast.h"
+#include "semantic.h"
 
 extern int getLineNumber();
 void yyerror(const char *s);
 int yylex();
 
 
+extern int semanticErrors;
 AST_NODE *root;
 
 %}
@@ -85,7 +87,7 @@ AST_NODE *root;
 
 %%
 
-program: list           {root=$$; astPrint(0,root);}
+program: list           {root=$$; astPrint(0,root); semanticErrors = checkSemantic(root);}
         ;
 
 list : global_decl list_code {$$ = astCreate(AST_LIST, 0, $1, $2, 0, 0, getLineNumber());}
@@ -207,11 +209,17 @@ expr: value {$$ = $1;}
     | vector{$$ = $1;}
     ;
 
-vector: TK_IDENTIFIER '[' expr ']' {$$ = astCreate(AST_VECTOR, $1, $3, 0, 0, 0, getLineNumber());}
+vector: TK_IDENTIFIER '[' value ']' {$$ = astCreate(AST_VECTOR, $1, $3, 0, 0, 0, getLineNumber());}
       ;
 
 %%
 
+void getSemanticErrors(){
+    if (semanticErrors > 0){
+        fprintf(stderr, "Semantic errors found: %d\n", semanticErrors);
+        exit(4);
+    }
+}
 
 void yyerror(const char *s) {
     fprintf(stderr, "Syntax error at line %d.", getLineNumber());

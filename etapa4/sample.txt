@@ -4,45 +4,37 @@ char c='x';
 char d=100;
 int 1a='A';
 int i=1;
-int v[10] 'a' 0'b'0 0 0 0 0 0 0;
+int v[10] 'a' 0 'b' 0 0 0 0 0 0 0;
 int matrix[100]; 
 float f=2.5;
-int a=0;
-
+float b=2.5;
 int main();
-int incn (int x, int n );
-
-code function1
-  {
-    a = icn(1 + 1, b);
-  }
-
-code main
-  {
+float incn (int dd, int n );
+int function1();
+code main{
   1a = 0;
   d = d - i;
   d = 5;
   v[d] = 55;
-  
   print v[5];
   print d;
   i = 2;
-
+  
   print "Digite um numero: \n";
-  d = input(int);
   print "Digite mais um numero: \n";
 
-  while (i<10)
+  while (i<101)
     {
-    i = incn(i,1);
-    d = incn(d,d);
+    f = incn(i,'a');
+    b = incn(d,d);
     }
 
   print "Incrementado algumas vezes a fica ";
   print d;
   print "\n";
+  
 
-  if (a==15)
+  if (f<15.5)
     {
     a = a + 1;
     print "A era=15\n";
@@ -59,5 +51,5 @@ code main
 
 code incn
   {
-  return x + n;
+  return 1.1;
   }

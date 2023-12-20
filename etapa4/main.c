@@ -10,6 +10,7 @@ extern int yylex();
 extern int yyparse();
 extern void astPrint(int level, AST_NODE *node);
 extern AST_NODE *getAST();
+extern void getSemanticErrors();
 
 extern char *yytext;
 extern FILE *yyin;
@@ -29,10 +30,10 @@ int main(int argc, char **argv) {
     printf("Cannot open file %s... \n", argv[1]);
     exit(2);
   }
-if (0 == (out = fopen(argv[2], "w+"))) {
+  if (0 == (out = fopen(argv[2], "w+"))) {
     printf("Cannot open file %s... \n", argv[2]);
     exit(2);
-}
+  }
 
   initMe();
 
@@ -41,6 +42,9 @@ if (0 == (out = fopen(argv[2], "w+"))) {
 
   astDecompile(getAST(), out);
   fclose(out);
+
+  getSemanticErrors();
+  fprintf(stderr, "No Semantic Errors\n");
 
   printf("Fim da compilacao com sucesso\n");
   exit(0);
