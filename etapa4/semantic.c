@@ -3,6 +3,7 @@
 #include "semantic.h"
 #include "ast.h"
 #include "hash.h"
+#include <stdio.h>
 
 int semanticErrors = 0;
 AST_NODE *ROOT;
@@ -138,6 +139,20 @@ void setNodeDatatype(AST_NODE *node) {
   } else if (node->type == AST_FUNC_CALL || node->type == AST_VECTOR) {
     node->datatype = node->symbol->datatype;
 
+  } else if (node->type == AST_INPUT) {
+    switch (node->son[0]->type) {
+    case AST_INT:
+      node->datatype = DATATYPE_INT;
+      break;
+    case AST_CHAR:
+      node->datatype = DATATYPE_CHAR;
+      break;
+    case AST_FLOAT:
+      node->datatype = DATATYPE_REAL;
+    default:
+      break;
+    }
+
   } else if (node->type == AST_PAREN) {
     node->datatype = node->son[0]->datatype;
 
@@ -200,8 +215,31 @@ void checkUse(AST_NODE *node) {
               node->symbol->text, node->lineNumber);
       semanticErrors++;
     }
+
+    if (node->son[0]->type == AST_VECTOR) {
+      if (node->son[0]->symbol->type != SYMBOL_VECTOR) {
+        fprintf(stderr,
+                "Semantic error: symbol %s is not a vector for indexing at "
+                "line %d\n",
+                node->son[0]->symbol->text, node->lineNumber);
+        semanticErrors++;
+      }
+      if (!isCompatible(node->symbol->datatype, node->son[0]->datatype)) {
+        fprintf(stderr,
+                "Semantic error: incompatible vector types at line %d\n",
+                node->lineNumber);
+        semanticErrors++;
+      }
+      if (!isInt(node->son[0]->son[0]->datatype)) {
+        fprintf(stderr, "Semantic error: Index must be integer at line %d\n",
+                node->lineNumber);
+        semanticErrors++;
+      }
+    }
+
     if (!isCompatible(node->symbol->datatype, node->son[0]->datatype)) {
-      fprintf(stderr, "Semantic error: incompatible attribute types at line %d\n",
+      fprintf(stderr,
+              "Semantic error: incompatible attribute types at line %d\n",
               node->lineNumber);
       semanticErrors++;
     }
@@ -411,7 +449,7 @@ void checkReturnTypes(AST_NODE *node, int type) {
 }
 
 void checkReturn(AST_NODE *node) {
-if (node != NULL && node->type == AST_FUNC_IMPL) {
+  if (node != NULL && node->type == AST_FUNC_IMPL) {
     checkReturnTypes(node, node->symbol->datatype);
   }
   for (int i = 0; i < MAX_SONS; i++) {

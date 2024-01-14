@@ -15,7 +15,7 @@ void hashInit();
 DIGIT [0-9]+
 SPECIAL_CHAR [-=,;(){}[\]<>+*/%&|~]
 ID [_a-zA-Z0-9]*[_a-zA-Z][_a-zA-Z0-9]*
-WHITESPACE [\t\r\n]+
+WHITESPACE [\t\r]+
 STRING \"(\\.|[^\"])*\"
 CHAR \'[-=,;(){}[\]<>+*/%&|~a-zA-Z0-9]\'
 
@@ -24,7 +24,7 @@ CHAR \'[-=,;(){}[\]<>+*/%&|~a-zA-Z0-9]\'
 
 %%
 
-\n                   LineNumber++;
+"\n"                 { LineNumber++; }
 
 "//"                 { BEGIN(LINE_COMMENT); }
 "///"                { BEGIN(COMMENT); }

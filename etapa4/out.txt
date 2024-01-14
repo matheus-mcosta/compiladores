@@ -1,11 +1,12 @@
 char  a= 15;
 char  x= 'x';
 char  c= 'x';
-char  d= 100;
+int  d= '1';
 int  1a= 'A';
 int  i= 1;
 int  v[ 10] 'a' 0 'b' 0 0 0 0 0 0 0;
 int  matrix[ 100];
+float  mf[ 3] 1.1 2.2 3.3;
 float  f= 2.5;
 float  b= 2.5;
 int  main();
@@ -31,6 +32,10 @@ b = incn( d,  d);
 print "Incrementado algumas vezes a fica ";
 print d;
 print "\n";
+i = input(int );
+f = input(float );
+f =  mf[ 1];
+i =  v[ 0];
 if ( f< 15.5)
 {
 a =  a +  1;
