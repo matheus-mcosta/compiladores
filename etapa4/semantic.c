@@ -136,7 +136,15 @@ void setNodeDatatype(AST_NODE *node) {
       semanticErrors++;
     }
     node->datatype = node->symbol->datatype;
-  } else if (node->type == AST_FUNC_CALL || node->type == AST_VECTOR) {
+  } else if (node->type == AST_FUNC_CALL) {
+    node->datatype = node->symbol->datatype;
+  } else if (node->type == AST_VECTOR) {
+
+    if (!isInt(node->son[0]->datatype)) {
+      fprintf(stderr, "Semantic error: Index must be integer at line %d\n",
+              node->lineNumber);
+      semanticErrors++;
+    }
     node->datatype = node->symbol->datatype;
 
   } else if (node->type == AST_INPUT) {
@@ -276,6 +284,16 @@ void checkUse(AST_NODE *node) {
       semanticErrors++;
     }
     break;
+
+  case AST_PRINT:
+    if (node->son[0]->type == AST_VECTOR) {
+      if (!isInt(node->son[0]->son[0]->datatype)) {
+        fprintf(stderr, "Semantic error: Index must be integer at line %d\n",
+                node->lineNumber);
+        semanticErrors++;
+      }
+    }
+
   default:
     break;
   }
