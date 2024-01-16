@@ -209,7 +209,7 @@ expr: value {$$ = $1;}
     | vector{$$ = $1;}
     ;
 
-vector: TK_IDENTIFIER '[' value ']' {$$ = astCreate(AST_VECTOR, $1, $3, 0, 0, 0, getLineNumber());}
+vector: TK_IDENTIFIER '[' expr ']' {$$ = astCreate(AST_VECTOR, $1, $3, 0, 0, 0, getLineNumber());}
       ;
 
 %%
@@ -230,4 +230,3 @@ void yyerror(const char *s) {
 AST_NODE *getAST() {
     return root;
 }
-

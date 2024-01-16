@@ -1,55 +1,61 @@
-// UFRGS - Compiladores - Marcelo Johann - 2023/2
-
 char a=15;
 char x='x';
 char c='x';
-char d=100;
+int d = '1';
 int 1a='A';
 int i=1;
-int v[10] 'a' 0'b'0 0 0 0 0 0 0;
+int v[10] 'a' 0 'b' 0 0 0 0 0 0 0;
 int matrix[100]; 
+float mf[3] 1.1 2.2 3.3;
 float f=2.5;
-int a=0;
-
+float b=2.5;
 int main();
-int incn (int x, int n );
-
-code function1
-  {
-    a = icn(1 + 1, b);
-  }
-
-code main
-  {
+float incn (int dd, int n );
+int function1();
+code main{
   1a = 0;
   d = d - i;
   d = 5;
   v[d] = 55;
-  
-  print v[5];
+  print v[5.5];
   print d;
   i = 2;
-
   print "Digite um numero: \n";
-  d = input(int);
   print "Digite mais um numero: \n";
-
-  while (i<10)
+  while (i<101)
     {
-    i = incn(i,1);
-    d = incn(d,d);
+    f = incn(i,'a');
+    b = incn(d,d);
     }
-
   print "Incrementado algumas vezes a fica ";
   print d;
   print "\n";
+  i = input(int);
+  f = input(float);
+  f = mf[1];
+  i = v[0];
+  // v[f+f*f+f] = 1;
+  v[1 + 1 + v[1] +1] = 1;
 
-  if (a==15)
+  v[1] = v[1+1];
+  v[3] = v[1+v[1]];
+
+  ///
+
+    comentario
+
+    erro sintatico
+    erro vetor [ 1 + 2 + 3 + a]
+
+   ta aceitando vetor[float * float + float * float]
+  \\\ 
+  
+                
+  if (f<15.5)
     {
     a = a + 1;
     print "A era=15\n";
     };
-    
   if (i==100)
     {
     print "Nao tem como isso...\n";
@@ -58,12 +64,7 @@ code main
     print "OK!\n"; 
   {{}} {}
   }
-
 code incn
   {
-  return x + n;
+  return 1.1;
   }
-
-// end of file
-  
-

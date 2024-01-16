@@ -102,7 +102,7 @@ Grammar
    66     | TK_IDENTIFIER
    67     | vector
 
-   68 vector: TK_IDENTIFIER '[' value ']'
+   68 vector: TK_IDENTIFIER '[' expr ']'
 
 
 Terminals, with rules where they appear
@@ -182,7 +182,7 @@ param (54)
 vector_params (55)
     on left: 25 26, on right: 9 25
 value (56)
-    on left: 27 28 29, on right: 7 25 26 49 68
+    on left: 27 28 29, on right: 7 25 26 49
 block (57)
     on left: 30, on right: 37
 list_cmd (58)
@@ -204,7 +204,7 @@ input (65)
 expr (66)
     on left: 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66
     67, on right: 16 18 40 41 42 43 44 45 47 52 53 54 55 56 57 58 59
-    60 61 62 63 64 65
+    60 61 62 63 64 65 68
 vector (67)
     on left: 68, on right: 67
 
@@ -667,7 +667,7 @@ state 45
 
    15 func_call: TK_IDENTIFIER . '(' arg_list ')'
    66 expr: TK_IDENTIFIER .
-   68 vector: TK_IDENTIFIER . '[' value ']'
+   68 vector: TK_IDENTIFIER . '[' expr ']'
 
     '['  shift, and go to state 68
     '('  shift, and go to state 69
@@ -1009,13 +1009,21 @@ state 67
 
 state 68
 
-   68 vector: TK_IDENTIFIER '[' . value ']'
+   68 vector: TK_IDENTIFIER '[' . expr ']'
 
-    LIT_INT   shift, and go to state 34
-    LIT_REAL  shift, and go to state 35
-    LIT_CHAR  shift, and go to state 36
+    KW_INPUT       shift, and go to state 44
+    TK_IDENTIFIER  shift, and go to state 45
+    LIT_INT        shift, and go to state 34
+    LIT_REAL       shift, and go to state 35
+    LIT_CHAR       shift, and go to state 36
+    '~'            shift, and go to state 47
+    '('            shift, and go to state 48
 
-    value  go to state 99
+    func_call  go to state 49
+    value      go to state 50
+    input      go to state 51
+    expr       go to state 99
+    vector     go to state 53
 
 
 state 69
@@ -1514,9 +1522,33 @@ state 98
 
 state 99
 
-   68 vector: TK_IDENTIFIER '[' value . ']'
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '<' expr
+   57     | expr . '>' expr
+   58     | expr . OPERATOR_LE expr
+   59     | expr . OPERATOR_GE expr
+   60     | expr . OPERATOR_EQ expr
+   61     | expr . OPERATOR_DIF expr
+   62     | expr . '&' expr
+   63     | expr . '|' expr
+   68 vector: TK_IDENTIFIER '[' expr . ']'
 
-    ']'  shift, and go to state 123
+    OPERATOR_LE   shift, and go to state 73
+    OPERATOR_GE   shift, and go to state 74
+    OPERATOR_EQ   shift, and go to state 75
+    OPERATOR_DIF  shift, and go to state 76
+    '&'           shift, and go to state 77
+    '|'           shift, and go to state 78
+    '<'           shift, and go to state 79
+    '>'           shift, and go to state 80
+    '+'           shift, and go to state 81
+    '-'           shift, and go to state 82
+    '*'           shift, and go to state 83
+    '/'           shift, and go to state 84
+    ']'           shift, and go to state 123
 
 
 state 100
@@ -1928,7 +1960,7 @@ state 122
 
 state 123
 
-   68 vector: TK_IDENTIFIER '[' value ']' .
+   68 vector: TK_IDENTIFIER '[' expr ']' .
 
     $default  reduce using rule 68 (vector)
 

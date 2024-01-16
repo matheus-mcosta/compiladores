@@ -17,7 +17,7 @@ code main{
   d = d - i;
   d = 5;
   v[d] = 55;
-  print v[5];
+  print v[5.5];
   print d;
   i = 2;
   print "Digite um numero: \n";
@@ -34,20 +34,24 @@ code main{
   f = input(float);
   f = mf[1];
   i = v[0];
+  // v[f+f*f+f] = 1;
+  v[1 + 1 + v[1] +1] = 1;
+
+  v[1] = v[1+1];
+  v[3] = v[1+v[1]];
+
 
   ///
 
     comentario
 
+    erro sintatico
+    erro vetor [ 1 + 2 + 3 + a]
 
+   ta aceitando vetor[float * float + float * float]
   \\\ 
   
                 
-  if (f<15.5)
-    {
-    a = a + 1;
-    print "A era=15\n";
-    };
   if (i==100)
     {
     print "Nao tem como isso...\n";
