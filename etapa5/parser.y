@@ -2,6 +2,7 @@
 
 #include "ast.h"
 #include "semantic.h"
+#include "tacs.h"
 
 extern int getLineNumber();
 void yyerror(const char *s);
@@ -10,6 +11,7 @@ int yylex();
 
 extern int semanticErrors;
 AST_NODE *root;
+TAC *TACs;
 
 %}
 
@@ -87,7 +89,8 @@ AST_NODE *root;
 
 %%
 
-program: list           {root=$$; astPrint(0,root); semanticErrors = checkSemantic(root);}
+program: list           {root=$$; astPrint(0,root); semanticErrors = checkSemantic(root);
+                         TACs=tacReverse(generateCode(root, 0));}
         ;
 
 list : global_decl list_code {$$ = astCreate(AST_LIST, 0, $1, $2, 0, 0, getLineNumber());}
@@ -229,4 +232,8 @@ void yyerror(const char *s) {
 
 AST_NODE *getAST() {
     return root;
+}
+
+TAC *getTACs() {
+    return TACs;
 }

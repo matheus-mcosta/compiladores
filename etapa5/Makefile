@@ -9,11 +9,14 @@
 #
 
 
-etapa5: y.tab.o lex.yy.o hash.o ast.o semantic.o main.o
-	gcc -o etapa5 y.tab.o lex.yy.o hash.o ast.o semantic.o main.o
+etapa5: y.tab.o lex.yy.o hash.o ast.o semantic.o tacs.o main.o
+	gcc -o etapa5 y.tab.o lex.yy.o hash.o ast.o semantic.o tacs.o main.o
 
 main.o: main.c
 	gcc -c main.c
+
+tacs.o: tacs.c
+	gcc -c tacs.c
 
 semantic.o: semantic.c
 	gcc -c semantic.c

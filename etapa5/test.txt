@@ -1,0 +1,9 @@
+char a=15;
+int vec[2];
+int v[3] 1 2 3;
+int main();
+code main{
+    a = 2;
+    v[1] = 2;
+    print a;
+}

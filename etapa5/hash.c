@@ -83,3 +83,23 @@ int hashCheckUndeclared(void) {
   }
   return num_undeclared;
 }
+
+HASH_NODE *makeTemp(int datatype) {
+  static int serialNumber = 0;
+  static char buffer[128];
+  sprintf(buffer, "_TTemP%d", serialNumber++);
+
+  HASH_NODE *node = hashInsert(buffer, SYMBOL_SCALAR);
+  node->datatype = datatype;
+
+  return node;
+}
+
+HASH_NODE *makeLabel(void) {
+  static int serialNumber = 0;
+  static char buffer[128];
+  sprintf(buffer, "_LLabeL%d", serialNumber++);
+  HASH_NODE *node = hashInsert(buffer, SYMBOL_LABEL);
+  return node;
+}
+

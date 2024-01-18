@@ -2,6 +2,7 @@
 
 #include "ast.h"
 #include "lex.yy.h"
+#include "tacs.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -11,6 +12,7 @@ extern int yyparse();
 extern void astPrint(int level, AST_NODE *node);
 extern AST_NODE *getAST();
 extern void getSemanticErrors();
+extern TAC *getTACs();
 
 extern char *yytext;
 extern FILE *yyin;
@@ -45,7 +47,8 @@ int main(int argc, char **argv) {
 
   getSemanticErrors();
   fprintf(stderr, "No Semantic Errors\n");
-
+  fprintf(stderr, "Generating TACs:\n\n");
+  printAllTacs(getTACs());
   printf("Fim da compilacao com sucesso\n");
   exit(0);
 }

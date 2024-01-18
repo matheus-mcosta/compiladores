@@ -46,10 +46,6 @@ code main{
 
     comentario
 
-    erro sintatico
-    erro vetor [ 1 + 2 + 3 + a]
-
-   ta aceitando vetor[float * float + float * float]
   \\\ 
   
                 
