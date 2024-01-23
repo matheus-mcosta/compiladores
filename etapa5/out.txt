@@ -1,11 +1,56 @@
 char  a= 15;
-int  vec[ 2];
-int  v[ 3] 1 2 3;
+char  x= 'x';
+char  c= 'x';
+int  d= '1';
+int  1a= 'A';
+int  i= 1;
+int  v[ 10] 'a' 0 'b' 0 0 0 0 0 0 0;
+int  matrix[ 100];
+float  mf[ 3] 1.1 2.2 3.3;
+float  f= 2.5;
+float  b= 2.5;
 int  main();
+float  incn(int dd, int n);
+int  function1();
 
 code main
 {
-a =  2;
-v[ 1] =  2;
-print a;
+1a =  0;
+d =  d -  i;
+d =  5;
+v[ d] =  55;
+print v[ 5];
+print d;
+i =  2;
+print "Digite um numero: \n";
+print "Digite mais um numero: \n";
+while( i< 101)
+{
+f = incn( i,  'a');
+b = incn( d,  d);
+}
+print "Incrementado algumas vezes a fica ";
+print d;
+print "\n";
+i = input(int );
+f = input(float );
+f =  mf[ 1];
+i =  v[ 0];
+v[ 1 +  1 +  v[ 1] +  1] =  1;
+v[ 1] =  v[ 1 +  1];
+v[ 3] =  v[ 1 +  v[ 1]];
+i =  1 +  v[ 1];
+if ( i== v[ 1])
+{
+print "Nao tem como isso...\n";
+}
+else
+print "OK!\n";
+{
+{
+}}{
+}}
+code incn
+{
+return  1.1;
 }

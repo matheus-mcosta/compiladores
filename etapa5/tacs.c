@@ -204,25 +204,24 @@ TAC *generateCode(AST_NODE *node, HASH_NODE *currentLabel) {
   case AST_NOT:
     return createBinOp(TAC_NOT, code, node->datatype);
   // CMDS
-  case AST_DECL:
-    return tacJoin(code[0], tacCreate(TAC_MOVE, node->symbol,
-                                      code[1] ? code[1]->res : 0, 0));
+  // case AST_DECL:
+  //   return tacJoin(code[0], tacCreate(TAC_MOVE, node->symbol,
+  //                                     code[1] ? code[1]->res : 0, 0));
   case AST_ATTRIBUTE:
     return tacJoin(code[0], tacCreate(TAC_MOVE, node->symbol,
                                       code[0] ? code[0]->res : 0, 0));
-  case AST_VECTORD2:
-    return tacJoin(tacJoin(code[0], code[1]),
-                   tacCreate(TAC_VECATTR, node->symbol,
-                             code[2] ? code[2]->res : 0,
-                             code[1] ? code[1]->res : 0));
+  // case AST_VECTORD2:
+  //   return tacJoin(tacJoin(code[0], code[1]),
+  //                  tacCreate(TAC_VECATTR, node->symbol,
+  //                            code[2] ? code[2]->res : 0,
+  //                            code[1] ? code[1]->res : 0));
   case AST_ATTRIB_VEC:
     return tacJoin(tacJoin(code[0], code[1]),
                    tacCreate(TAC_VECATTR, node->symbol,
                              code[1] ? code[1]->res : 0,
                              code[0] ? code[0]->res : 0));
   case AST_INPUT:
-    return tacCreate(TAC_READ, node->symbol, 0, 0);
-  case AST_PRINT:
+    return tacCreate(TAC_READ, makeTemp(node->datatype), node->symbol, 0);
     return tacJoin(code[0],
                    tacCreate(TAC_PRINT, code[0] ? code[0]->res : 0, 0, 0));
   case AST_RETURN:
@@ -250,8 +249,8 @@ TAC *generateCode(AST_NODE *node, HASH_NODE *currentLabel) {
   case AST_FUNC_IMPL:
     return createFunc(tacCreate(TAC_SYMBOL, node->symbol, 0, 0), code[0],
                       code[1]);
-  case AST_PARAM:
-    return tacJoin(tacCreate(TAC_PARAM, node->symbol, 0, 0), code[1]);
+    // case AST_PARAM:
+    //   return tacJoin(tacCreate(TAC_PARAM, node->symbol, 0, 0), code[1]);
 
   default:
     return tacJoin(tacJoin(tacJoin(code[0], code[1]), code[2]), code[3]);
