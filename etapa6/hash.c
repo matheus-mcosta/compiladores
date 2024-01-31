@@ -103,3 +103,11 @@ HASH_NODE *makeLabel(void) {
   return node;
 }
 
+HASH_NODE *makeString(void){
+    static int serialNumber = 1;
+    static char buffer[128];
+    sprintf(buffer, "lC%d", serialNumber++);
+    HASH_NODE *node = hashInsert(buffer, SYMBOL_LIT_STRING);
+    return node;
+    }
+

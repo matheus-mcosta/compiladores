@@ -222,8 +222,9 @@ TAC *generateCode(AST_NODE *node, HASH_NODE *currentLabel) {
                              code[0] ? code[0]->res : 0));
   case AST_INPUT:
     return tacCreate(TAC_READ, makeTemp(node->datatype), node->symbol, 0);
+  case AST_PRINT:
     return tacJoin(code[0],
-                   tacCreate(TAC_PRINT, code[0] ? code[0]->res : 0, 0, 0));
+                   tacCreate(TAC_PRINT, code[0] ? code[0]->res : 0, makeString(), 0));
   case AST_RETURN:
     return tacJoin(code[0],
                    tacCreate(TAC_RET, code[0] ? code[0]->res : 0, 0, 0));
