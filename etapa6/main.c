@@ -3,6 +3,7 @@
 #include "ast.h"
 #include "lex.yy.h"
 #include "tacs.h"
+#include "asm.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -42,13 +43,19 @@ int main(int argc, char **argv) {
   yyparse();
   // astPrint(0, getAST());
 
-  astDecompile(getAST(), out);
+  AST_NODE *ast = getAST();
+  astDecompile(ast, out);
   fclose(out);
 
   getSemanticErrors();
   fprintf(stderr, "No Semantic Errors\n");
   fprintf(stderr, "Generating TACs:\n\n");
-  printAllTacs(getTACs());
+
+  TAC *tacs = getTACs();
+  printAllTacs(tacs);
+
+  fprintf(stderr, "Generating Assembly:\n\n");
+  asmGen(tacs, ast);
   printf("Fim da compilacao com sucesso\n");
   exit(0);
 }
