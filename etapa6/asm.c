@@ -14,11 +14,6 @@ void writeDeclarations(FILE *fout, AST_NODE *ast) {
 
   switch (ast->type) {
 
-    // 	.globl _a
-    // 	.data
-    // 	.align	2
-    // _a:
-
   case AST_DECL:
     if (ast->son[1]) {
       if (ast->son[1]->symbol->datatype == DATATYPE_INT) {
@@ -121,19 +116,13 @@ void writeTACS(FILE *fout, TAC *tacs) {
                 "\tldr w0, [x0]\n",
                 curr_tac->res->text, curr_tac->res->text);
       }
+      break;
 
     case TAC_PRINT:
 
       if (curr_tac->res->datatype == DATATYPE_INT) {
-    // Number print
-    //     adrp	x0, _a@PAGE
-    //     add	x0, x0, _a@PAGEOFF;momd
-    //     ldr	w0, [x0]
-    //     str	w0, [sp]
-    //     adrp	x0, lC0@PAGE
-    //     add	x0, x0, lC0@PAGEOFF;momd
-    //     bl	_printf
-          fprintf(fout, "\tadrp x0, _%s@PAGE\n"
+        fprintf(fout,
+                "\tadrp x0, _%s@PAGE\n"
                 "\tadd x0, x0, _%s@PAGEOFF\n"
                 "\tldr w0, [x0]\n"
                 "\tstr w0, [sp]\n"
@@ -150,25 +139,6 @@ void writeTACS(FILE *fout, TAC *tacs) {
                 "\tbl _printf\n",
                 curr_tac->op1->text, curr_tac->op1->text);
       }
-      /*
-       *
-       String print
-        adrp	x0, lC01PAGE
-        add	x0, x0, lC01PAGEOFF;momd
-        bl	_printf
-
-
-    Number print
-        adrp	x0, _a@PAGE
-        add	x0, x0, _a@PAGEOFF;momd
-        ldr	w0, [x0]
-        str	w0, [sp]
-        adrp	x0, lC0@PAGE
-        add	x0, x0, lC0@PAGEOFF;momd
-        bl	_printf
-
-
-       * */
       break;
 
       break;
@@ -181,8 +151,6 @@ void asmGen(TAC *tacs, AST_NODE *ast) {
   FILE *fout = fopen("asm.s", "w");
 
   fprintf(fout, ".arch armv8-a\n.text\n");
-  // Define a string format for printing integers
-
   writeStrings(fout, tacs);
   writeDeclarations(fout, ast);
   writeTACS(fout, tacs);

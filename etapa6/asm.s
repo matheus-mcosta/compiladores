@@ -7,39 +7,39 @@ lC0:
 	.text
 	.cstring
 	.align  3
-lC3:
+lC2:
 	.ascii "Digite um numero: \n\0"
 	.text
 	.cstring
 	.align  3
-lC4:
+lC3:
 	.ascii "Digite mais um numero: \n\0"
 	.text
 	.cstring
 	.align  3
-lC5:
+lC4:
 	.ascii "Incrementado algumas vezes a fica \0"
 	.text
 	.cstring
 	.align  3
-lC7:
+lC6:
 	.ascii "\n\0"
 	.text
 	.cstring
 	.align  3
-lC8:
+lC7:
 	.ascii "Nao tem como isso...\n\0"
 	.text
 	.cstring
 	.align  3
-lC9:
+lC8:
 	.ascii "OK!\n\0"
 	.text
 	.globl _a
 	.data
 	.align 2
 _a:
-	.word 15
+	.word 0
 	.globl _x
 	.data
 	.align 2
@@ -79,21 +79,14 @@ FBEGIN_main:
 	adrp x0, lC0@PAGE
 	add x0, x0, lC0@PAGEOFF
 	bl _printf
-	adrp x0, _i@PAGE
-	add x0, x0, _i@PAGEOFF
-	ldr w0, [x0]
-	str w0, [sp]
-	adrp x0, lC0@PAGE
-	add x0, x0, lC0@PAGEOFF
+	adrp x0, lC2@PAGE
+	add x0, x0, lC2@PAGEOFF
 	bl _printf
 	adrp x0, lC3@PAGE
 	add x0, x0, lC3@PAGEOFF
 	bl _printf
 	adrp x0, lC4@PAGE
 	add x0, x0, lC4@PAGEOFF
-	bl _printf
-	adrp x0, lC5@PAGE
-	add x0, x0, lC5@PAGEOFF
 	bl _printf
 	adrp x0, _d@PAGE
 	add x0, x0, _d@PAGEOFF
@@ -102,18 +95,16 @@ FBEGIN_main:
 	adrp x0, lC0@PAGE
 	add x0, x0, lC0@PAGEOFF
 	bl _printf
+	adrp x0, lC6@PAGE
+	add x0, x0, lC6@PAGEOFF
+	bl _printf
 	adrp x0, lC7@PAGE
 	add x0, x0, lC7@PAGEOFF
 	bl _printf
 	adrp x0, lC8@PAGE
 	add x0, x0, lC8@PAGEOFF
 	bl _printf
-	adrp x0, lC9@PAGE
-	add x0, x0, lC9@PAGEOFF
-	bl _printf
-	adrp x0, _a@PAGE
-	add x0, x0, _a@PAGEOFF
-	ldr w0, [x0]
+	 mov w0, 0
 	ldp x29, x30, [sp], 16
 	ret
 FEND2_main:
