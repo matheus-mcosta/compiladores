@@ -111,3 +111,7 @@ HASH_NODE *makeString(void){
     return node;
     }
 
+
+HASH_NODE** getTable(){
+    return Table;
+}

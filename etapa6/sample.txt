@@ -13,8 +13,10 @@ int main();
 float incn (int dd, int n );
 int function1();
 code main{
+    d = 0;
+    print d;
   1a = 0;
-  d = d - i;
+  d = d +1+ i;
   d = 5;
   v[d] = 55;
   print d;
@@ -23,15 +25,11 @@ code main{
   print "Digite mais um numero: \n";
   while (i<101)
     {
-    f = incn(i,'a');
-    b = incn(d,d);
     }
   print "Incrementado algumas vezes a fica ";
   print d;
   print "\n";
   i = input(int);
-  f = input(float);
-  f = mf[1];
   i = v[0];
   // v[f+f*f+f] = 1;
   v[1 + 1 + v[1] +1] = 1;

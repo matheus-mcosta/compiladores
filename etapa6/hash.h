@@ -48,5 +48,6 @@ int hashCheckUndeclared(void);
 HASH_NODE *makeTemp(int datatype);
 HASH_NODE *makeLabel(void);
 HASH_NODE *makeString(void);
+HASH_NODE** getTable();
 
 #endif
