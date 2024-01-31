@@ -72,6 +72,20 @@ _main:
 FBEGIN_main:
 	stp	x29, x30, [sp, -16]!
 	mov	x29, sp
+	adrp x0, _d@PAGE
+	add x0, x0, _d@PAGEOFF
+	ldr w0, [x0]
+	str w0, [sp]
+	adrp x0, lC0@PAGE
+	add x0, x0, lC0@PAGEOFF
+	bl _printf
+	adrp x0, _i@PAGE
+	add x0, x0, _i@PAGEOFF
+	ldr w0, [x0]
+	str w0, [sp]
+	adrp x0, lC0@PAGE
+	add x0, x0, lC0@PAGEOFF
+	bl _printf
 	adrp x0, lC3@PAGE
 	add x0, x0, lC3@PAGEOFF
 	bl _printf
@@ -80,6 +94,13 @@ FBEGIN_main:
 	bl _printf
 	adrp x0, lC5@PAGE
 	add x0, x0, lC5@PAGEOFF
+	bl _printf
+	adrp x0, _d@PAGE
+	add x0, x0, _d@PAGEOFF
+	ldr w0, [x0]
+	str w0, [sp]
+	adrp x0, lC0@PAGE
+	add x0, x0, lC0@PAGEOFF
 	bl _printf
 	adrp x0, lC7@PAGE
 	add x0, x0, lC7@PAGEOFF

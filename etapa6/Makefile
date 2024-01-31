@@ -42,6 +42,9 @@ lex.yy.o: lex.yy.c
 lex.yy.c: scanner.l
 	lex --header-file=lex.yy.h scanner.l
 
+run: etapa6
+	gcc asm.s 
+
 clean:
 	rm -f *.o etapa6 lex.yy.c lex.yy.h y.tab.c y.tab.h y.output
 

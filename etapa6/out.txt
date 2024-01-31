@@ -19,8 +19,8 @@ code main
 d =  d -  i;
 d =  5;
 v[ d] =  55;
-print v[ 5];
 print d;
+print i;
 i =  2;
 print "Digite um numero: \n";
 print "Digite mais um numero: \n";

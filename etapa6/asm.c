@@ -125,6 +125,22 @@ void writeTACS(FILE *fout, TAC *tacs) {
     case TAC_PRINT:
 
       if (curr_tac->res->datatype == DATATYPE_INT) {
+    // Number print
+    //     adrp	x0, _a@PAGE
+    //     add	x0, x0, _a@PAGEOFF;momd
+    //     ldr	w0, [x0]
+    //     str	w0, [sp]
+    //     adrp	x0, lC0@PAGE
+    //     add	x0, x0, lC0@PAGEOFF;momd
+    //     bl	_printf
+          fprintf(fout, "\tadrp x0, _%s@PAGE\n"
+                "\tadd x0, x0, _%s@PAGEOFF\n"
+                "\tldr w0, [x0]\n"
+                "\tstr w0, [sp]\n"
+                "\tadrp x0, lC0@PAGE\n"
+                "\tadd x0, x0, lC0@PAGEOFF\n"
+                "\tbl _printf\n",
+                curr_tac->res->text, curr_tac->res->text);
 
       } else if (curr_tac->res->type == SYMBOL_LIT_STRING) {
 
