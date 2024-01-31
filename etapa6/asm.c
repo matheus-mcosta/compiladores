@@ -66,17 +66,13 @@ void writeStrings(FILE *fout, TAC *tacs) {
         new_str[strlen(new_str) - 1] = '\0';
 
         fprintf(fout,
+                "\t.cstring\n"
+                "\t.align  3\n"
                 "%s:\n"
                 "\t.ascii \"%s\\0\"\n"
                 "\t.text\n",
                 curr_tac->op1->text, new_str);
       }
-
-      /*
-      lC0:
-              .ascii "test\0"
-              .text
-          */
     }
   }
 }
@@ -127,11 +123,34 @@ void writeTACS(FILE *fout, TAC *tacs) {
       }
 
     case TAC_PRINT:
+
+      if (curr_tac->res->datatype == DATATYPE_INT) {
+
+      } else if (curr_tac->res->type == SYMBOL_LIT_STRING) {
+
+        fprintf(fout,
+                "\tadrp x0, %s@PAGE\n"
+                "\tadd x0, x0, %s@PAGEOFF\n"
+                "\tbl _printf\n",
+                curr_tac->op1->text, curr_tac->op1->text);
+      }
       /*
        *
-       *	adrp	x0, lC0@PAGE
-              add	x0, x0, lC0@PAGEOFF;momd
-              bl	_printf
+       String print
+        adrp	x0, lC01PAGE
+        add	x0, x0, lC01PAGEOFF;momd
+        bl	_printf
+
+
+    Number print
+        adrp	x0, _a@PAGE
+        add	x0, x0, _a@PAGEOFF;momd
+        ldr	w0, [x0]
+        str	w0, [sp]
+        adrp	x0, lC0@PAGE
+        add	x0, x0, lC0@PAGEOFF;momd
+        bl	_printf
+
 
        * */
       break;
