@@ -6,6 +6,16 @@
 #include "hash.h"
 #include "tacs.h"
 
+TAC *getFuncionCall(TAC *tac) {
+  TAC *curr_tac;
+  for (curr_tac = tac; curr_tac; curr_tac = curr_tac->next) {
+    if (curr_tac->type == TAC_CALL) {
+      return curr_tac;
+    }
+  }
+  return NULL;
+}
+
 void writeDeclarations(FILE *fout, AST_NODE *ast) {
   if (!ast)
     return;
@@ -66,6 +76,16 @@ void writeDeclarations(FILE *fout, AST_NODE *ast) {
         fprintf(fout, "\t.byte %d\n", aux->son[0]->symbol->text[1]);
       }
     }
+    break;
+
+  case AST_PARAM:
+    fprintf(fout,
+            "\n\t.globl _%s\n"
+            "\t.data\n"
+            "\t.align 2\n"
+            "_%s:\n"
+            "\t.word 0\n",
+            ast->symbol->text, ast->symbol->text);
     break;
   }
 
@@ -192,7 +212,6 @@ void writeTACS(FILE *fout, TAC *tacs) {
                 "\n\tadrp x0, _%s@PAGE ; TAC_RET\n"
                 "\tadd x0, x0, _%s@PAGEOFF\n"
                 "\tldr w0, [x0]\n"
-                "\tldp x29, x30, [sp], 16 \n"
                 "\tret\n",
                 curr_tac->res->text, curr_tac->res->text);
       }
@@ -252,7 +271,7 @@ void writeTACS(FILE *fout, TAC *tacs) {
                 "\tmov w1, %s\n"
                 "\tstr w1, [x0]\n",
                 curr_tac->res->text, curr_tac->res->text, curr_tac->op1->text);
-      } else {
+      } else if (curr_tac->op1->type == SYMBOL_SCALAR) {
 
         fprintf(fout,
                 "\n\tadrp x0, _%s@PAGE ; TAC_MOVE\n"
@@ -324,7 +343,7 @@ void writeTACS(FILE *fout, TAC *tacs) {
                   "\tstr w1, [x0, %d]\n",
                   curr_tac->res->text, curr_tac->res->text, curr_tac->op1->text,
                   offset);
-        } else {
+        } else if (curr_tac->op1->type == SYMBOL_SCALAR) {
 
           fprintf(fout,
                   "\n\tadrp x0, _%s@PAGE ; TAC_VECATTR\n"
@@ -349,7 +368,7 @@ void writeTACS(FILE *fout, TAC *tacs) {
                   "\tstr w2, [x0, x1, lsl 2]\n",
                   curr_tac->op2->text, curr_tac->op2->text, curr_tac->res->text,
                   curr_tac->res->text, curr_tac->op1->text);
-        } else {
+        } else if (curr_tac->op1->type == SYMBOL_SCALAR) {
 
           fprintf(fout,
                   "\n\tadrp x0, _%s@PAGE ; TAC_VECATTR\n"
@@ -523,9 +542,10 @@ void writeTACS(FILE *fout, TAC *tacs) {
       break;
 
     case TAC_CALL:
+      arg_count = 0;
 
       fprintf(fout,
-              "\tbl _%s\n"
+              "\tbl _%s ; TAC_CALL\n"
               "\tmov w1, w0\n"
               "\tadrp x0, _%s@PAGE\n"
               "\tadd x0, x0, _%s@PAGEOFF\n"
@@ -533,9 +553,10 @@ void writeTACS(FILE *fout, TAC *tacs) {
               curr_tac->op1->text, curr_tac->res->text, curr_tac->res->text);
       break;
 
-    case TAC_ARG: // TODO
+    case TAC_ARG: {
+      arg_count++;
 
-      break;
+    } break;
     }
   }
 }

@@ -34,6 +34,7 @@
 #define TAC_VECATTR 27
 #define TAC_VEC 28
 #define TAC_PARAM 29
+#define TAC_FUNDEC 30
 
 
 
