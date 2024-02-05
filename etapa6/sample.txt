@@ -13,12 +13,28 @@ int main();
 float incn (int dd, int n );
 int function1();
 code main{
+  if (i==2)
+    {
+    print "Nao tem como isso...\n";
+    }else
+    {
+        print "OK!\n";
+    }
+
+
     d = 0;
+    d = 1 + d;
+    d = d + 2 - 3;
+    print d;
+    d = 2 - i;
     print d;
   1a = 0;
-  d = d +1+ i;
-  d = 5;
+  d = d + 1 + i;
   v[d] = 55;
+  print d;
+  d = d * 2;
+  print d;
+  d = d / 3;
   print d;
   i = 2;
   print "Digite um numero: \n";
@@ -48,7 +64,8 @@ code main{
                 
   if (i==v[1])
     {
-    print "Nao tem como isso...\n";
+    print "Nao tem como isso....\n";
+    i = 1;
     }
   else
     print "OK!\n"; 

@@ -15,38 +15,19 @@ int  function1();
 
 code main
 {
-d =  0;
-print d;
-1a =  0;
-d =  d +  1 +  i;
-d =  5;
-v[ d] =  55;
-print d;
-i =  2;
-print "Digite um numero: \n";
-print "Digite mais um numero: \n";
-while( i< 101)
-{
-}
-print "Incrementado algumas vezes a fica ";
-print d;
-print "\n";
-i = input(int );
-i =  v[ 0];
-v[ 1 +  1 +  v[ 1] +  1] =  1;
-v[ 1] =  v[ 1 +  1];
-v[ 3] =  v[ 1 +  v[ 1]];
-i =  1 +  v[ 1];
-if ( i== v[ 1])
+if ( i== 1)
 {
 print "Nao tem como isso...\n";
 }
 else
+{
 print "OK!\n";
-{
-{
-}}{
-}return  0;
+}1a =  0;
+print 1a;
+1a = input(int );
+print 1a;
+return  2;
+return  0;
 }
 code incn
 {

@@ -18,7 +18,7 @@ void writeDeclarations(FILE *fout, AST_NODE *ast) {
     if (ast->son[1]) {
       if (ast->son[1]->symbol->datatype == DATATYPE_INT) {
         fprintf(fout,
-                "\t.globl _%s\n"
+                "\n\t.globl _%s\n"
                 "\t.data\n"
                 "\t.align 2\n"
                 "_%s:\n"
@@ -27,7 +27,7 @@ void writeDeclarations(FILE *fout, AST_NODE *ast) {
                 ast->son[1]->symbol->text);
       } else if (ast->son[1]->symbol->datatype == DATATYPE_CHAR) {
         fprintf(fout,
-                "\t.globl _%s\n"
+                "\n\t.globl _%s\n"
                 "\t.data\n"
                 "\t.align 2\n"
                 "_%s:\n"
@@ -51,7 +51,7 @@ void writeTemps(FILE *fout) {
       if (strncmp(aux->text, "_TTemP", 6) == 0) {
 
         fprintf(fout,
-                "\t.globl _%s\n"
+                "\n\t.globl _%s\n"
                 "\t.data\n"
                 "\t.align 2\n"
                 "_%s:\n"
@@ -64,8 +64,11 @@ void writeTemps(FILE *fout) {
 
 void writeStrings(FILE *fout, TAC *tacs) {
 
-  fprintf(fout, "\t.cstring\n"
+  fprintf(fout, "\n\t.cstring\n"
                 "\t.align 3\n"
+                "lCReAD:\n"
+                "\t.ascii \"%%d\\0\"\n");
+  fprintf(fout, "\t.align 3\n"
                 "lC0:\n"
                 "\t.ascii \"%%d\\12\\0\"\n"
                 "\t.text\n");
@@ -79,7 +82,7 @@ void writeStrings(FILE *fout, TAC *tacs) {
         new_str[strlen(new_str) - 1] = '\0';
 
         fprintf(fout,
-                "\t.cstring\n"
+                "\n\t.cstring\n"
                 "\t.align  3\n"
                 "%s:\n"
                 "\t.ascii \"%s\\0\"\n"
@@ -88,6 +91,28 @@ void writeStrings(FILE *fout, TAC *tacs) {
       }
     }
   }
+}
+
+FILE *standardTwoVars(FILE *fout, TAC *tac, char *comment) {
+  if (tac->op1->type == SYMBOL_LIT_INT) {
+    fprintf(fout, "\n\tmov w1, %s ; %s\n", tac->op1->text, comment);
+  } else if (tac->op1->type == SYMBOL_SCALAR) {
+    fprintf(fout,
+            "\n\tadrp x0, _%s@PAGE ; %s\n"
+            "\tadd x0, x0, _%s@PAGEOFF\n"
+            "\tldr w1, [x0]\n",
+            tac->op1->text, comment, tac->op1->text);
+  }
+  if (tac->op2->type == SYMBOL_LIT_INT) {
+    fprintf(fout, "\tmov w0, %s\n", tac->op2->text);
+  } else if (tac->op2->type == SYMBOL_SCALAR) {
+    fprintf(fout,
+            "\tadrp x0, _%s@PAGE\n"
+            "\tadd x0, x0, _%s@PAGEOFF\n"
+            "\tldr w0, [x0]\n",
+            tac->op2->text, tac->op2->text);
+  }
+  return fout;
 }
 
 void writeTACS(FILE *fout, TAC *tacs) {
@@ -99,7 +124,7 @@ void writeTACS(FILE *fout, TAC *tacs) {
 
     case TAC_BEGINFUN:
       fprintf(fout,
-              "\t.text ;TAC_BEGINFUN\n"
+              "\n\t.text ;TAC_BEGINFUN\n"
               "\t.align 2\n"
               "\t.globl _%s\n"
               "_%s:\n"
@@ -111,7 +136,7 @@ void writeTACS(FILE *fout, TAC *tacs) {
 
     case TAC_ENDFUN:
       fprintf(fout,
-              "\tldp x29, x30, [sp], 16 ; TAC_ENDFUN\n"
+              "\n\tldp x29, x30, [sp], 16 ; TAC_ENDFUN\n"
               "\tret\n"
               "FEND2_%s:\n",
               curr_tac->res->text);
@@ -119,7 +144,11 @@ void writeTACS(FILE *fout, TAC *tacs) {
 
     case TAC_RET:
       if (curr_tac->res->type == SYMBOL_LIT_INT) {
-        fprintf(fout, "\t mov w0, %s ; TAC_RET\n", curr_tac->res->text);
+        fprintf(fout,
+                "\n\t mov w0, %s ; TAC_RET\n"
+                "\tldp x29, x30, [sp], 16 \n"
+                "\tret\n",
+                curr_tac->res->text);
       } else if (curr_tac->res->type == SYMBOL_SCALAR) {
         /*
          *
@@ -129,18 +158,30 @@ void writeTACS(FILE *fout, TAC *tacs) {
          *
          * */
         fprintf(fout,
-                "\tadrp x0, _%s@PAGE ; TAC_RET\n"
+                "\n\tadrp x0, _%s@PAGE ; TAC_RET\n"
                 "\tadd x0, x0, _%s@PAGEOFF\n"
-                "\tldr w0, [x0]\n",
+                "\tldr w0, [x0]\n"
+                "\tldp x29, x30, [sp], 16 \n"
+                "\tret\n",
                 curr_tac->res->text, curr_tac->res->text);
       }
       break;
 
+    case TAC_LABEL:
+      fprintf(fout, "\n%s:\n", curr_tac->res->text);
+      break;
+
+    case TAC_JUMP:
+      fprintf(fout, "\n\tb %s ; TAC_JUMP\n", curr_tac->res->text);
+      break;
+
     case TAC_PRINT:
 
-      if (curr_tac->res->datatype == DATATYPE_INT) {
+      fprintf(stderr, "TYPE: %d\n", curr_tac->res->datatype);
+      if (curr_tac->res->datatype == DATATYPE_INT ||
+          curr_tac->res->datatype == DATATYPE_CHAR) {
         fprintf(fout,
-                "\tadrp x0, _%s@PAGE ; TAC_PRINT INT\n"
+                "\n\tadrp x0, _%s@PAGE ; TAC_PRINT INT\n"
                 "\tadd x0, x0, _%s@PAGEOFF\n"
                 "\tldr w0, [x0]\n"
                 "\tstr w0, [sp]\n"
@@ -152,19 +193,30 @@ void writeTACS(FILE *fout, TAC *tacs) {
       } else if (curr_tac->res->type == SYMBOL_LIT_STRING) {
 
         fprintf(fout,
-                "\tadrp x0, %s@PAGE ; TAC_PRINT STRING\n"
+                "\n\tadrp x0, %s@PAGE ; TAC_PRINT STRING\n"
                 "\tadd x0, x0, %s@PAGEOFF\n"
                 "\tbl _printf\n",
                 curr_tac->op1->text, curr_tac->op1->text);
       }
 
       break;
+    case TAC_READ:
+
+      fprintf(fout,
+              "\n \tadrp x0, _%s@PAGE ; TAC_READ\n"
+              "\tadd x0, x0, _%s@PAGEOFF\n"
+              "\tstr x0, [sp]\n"
+              "\tadrp x0, lCReAD@PAGE\n"
+              "\tadd x0, x0, lCReAD@PAGEOFF\n"
+              "\tbl _scanf\n",
+              curr_tac->res->text, curr_tac->res->text);
+      break;
 
     case TAC_MOVE:
 
       if (curr_tac->op1->type == SYMBOL_LIT_INT) {
         fprintf(fout,
-                "\tadrp x0, _%s@PAGE ; TAC_MOVE\n"
+                "\n\tadrp x0, _%s@PAGE ; TAC_MOVE\n"
                 "\tadd x0, x0, _%s@PAGEOFF\n"
                 "\tmov w1, %s\n"
                 "\tstr w1, [x0]\n",
@@ -172,7 +224,7 @@ void writeTACS(FILE *fout, TAC *tacs) {
       } else {
 
         fprintf(fout,
-                "\tadrp x0, _%s@PAGE ; TAC_MOVE\n"
+                "\n\tadrp x0, _%s@PAGE ; TAC_MOVE\n"
                 "\tadd x0, x0, _%s@PAGEOFF\n"
                 "\tldr w1, [x0]\n"
                 "\tadrp x0, _%s@PAGE\n"
@@ -180,21 +232,161 @@ void writeTACS(FILE *fout, TAC *tacs) {
                 "\tstr w1, [x0]\n",
                 curr_tac->op1->text, curr_tac->op1->text, curr_tac->res->text,
                 curr_tac->res->text);
-        // adrp	x0, _a@PAGE
-        // add	x0, x0, _a@PAGEOFF;momd
-        // ldr	w1, [x0]
-        // adrp	x0, _b@PAGE
-        // add	x0, x0, _b@PAGEOFF;momd
-        // str	w1, [x0]
       }
-      // fprintf(fout,
-      //     "tipo: %d, texto: %s\n", curr_tac->res->type, curr_tac->res->text);
-      // fprintf(fout,
-      //     "tipo: %d, texto: %s\n", curr_tac->op1->type, curr_tac->op1->text);
 
       break;
     case TAC_ADD:
 
+      standardTwoVars(fout, curr_tac, "TAC_ADD");
+
+      fprintf(fout,
+              "\n\tadd w1, w1, w0\n"
+              "\tadrp x0, _%s@PAGE\n"
+              "\tadd x0, x0, _%s@PAGEOFF\n"
+              "\tstr w1, [x0]\n",
+              curr_tac->res->text, curr_tac->res->text);
+
+      break;
+    case TAC_SUB:
+      standardTwoVars(fout, curr_tac, "TAC_SUB");
+      fprintf(fout,
+              "\n\tsub w1, w1, w0\n"
+              "\tadrp x0, _%s@PAGE\n"
+              "\tadd x0, x0, _%s@PAGEOFF\n"
+              "\tstr w1, [x0]\n",
+              curr_tac->res->text, curr_tac->res->text);
+
+      break;
+
+    case TAC_MUL:
+      standardTwoVars(fout, curr_tac, "TAC_MUL");
+
+      fprintf(fout,
+              "\n\tmul w1, w1, w0\n"
+              "\tadrp x0, _%s@PAGE\n"
+              "\tadd x0, x0, _%s@PAGEOFF\n"
+              "\tstr w1, [x0]\n",
+              curr_tac->res->text, curr_tac->res->text);
+
+      break;
+
+    case TAC_DIV:
+      standardTwoVars(fout, curr_tac, "TAC_DIV");
+      fprintf(fout,
+              "\n\tsdiv w1, w1, w0\n"
+              "\tadrp x0, _%s@PAGE\n"
+              "\tadd x0, x0, _%s@PAGEOFF\n"
+              "\tstr w1, [x0]\n",
+              curr_tac->res->text, curr_tac->res->text);
+      break;
+
+    case TAC_GREAT:
+      standardTwoVars(fout, curr_tac, "TAC_GREAT");
+      fprintf(fout,
+              "\n\tcmp w1, w0\n"
+              "\tcset w1, gt\n"
+              "\tadrp x0, _%s@PAGE\n"
+              "\tadd x0, x0, _%s@PAGEOFF\n"
+              "\tstr w1, [x0]\n",
+              curr_tac->res->text, curr_tac->res->text);
+      break;
+
+    case TAC_LESS:
+      standardTwoVars(fout, curr_tac, "TAC_LESS");
+      fprintf(fout,
+              "\n\tcmp w1, w0\n"
+              "\tcset w1, lt\n"
+              "\tadrp x0, _%s@PAGE\n"
+              "\tadd x0, x0, _%s@PAGEOFF\n"
+              "\tstr w1, [x0]\n",
+              curr_tac->res->text, curr_tac->res->text);
+      break;
+
+    case TAC_GE:
+      standardTwoVars(fout, curr_tac, "TAC_GE");
+      fprintf(fout,
+              "\n\tcmp w1, w0\n"
+              "\tcset w1, ge\n"
+              "\tadrp x0, _%s@PAGE\n"
+              "\tadd x0, x0, _%s@PAGEOFF\n"
+              "\tstr w1, [x0]\n",
+              curr_tac->res->text, curr_tac->res->text);
+      break;
+
+    case TAC_LE:
+      standardTwoVars(fout, curr_tac, "TAC_LE");
+      fprintf(fout,
+              "\n\tcmp w1, w0\n"
+              "\tcset w1, le\n"
+              "\tadrp x0, _%s@PAGE\n"
+              "\tadd x0, x0, _%s@PAGEOFF\n"
+              "\tstr w1, [x0]\n",
+              curr_tac->res->text, curr_tac->res->text);
+      break;
+
+    case TAC_EQ:
+      standardTwoVars(fout, curr_tac, "TAC_EQ");
+      fprintf(fout,
+              "\n\tcmp w1, w0\n"
+              "\tcset w1, eq\n"
+              "\tadrp x0, _%s@PAGE\n"
+              "\tadd x0, x0, _%s@PAGEOFF\n"
+              "\tstr w1, [x0]\n",
+              curr_tac->res->text, curr_tac->res->text);
+
+      break;
+
+    case TAC_DIF:
+      standardTwoVars(fout, curr_tac, "TAC_DIF");
+      fprintf(fout,
+              "\n\tcmp w1, w0\n"
+              "\tcset w1, ne\n"
+              "\tadrp x0, _%s@PAGE\n"
+              "\tadd x0, x0, _%s@PAGEOFF\n"
+              "\tstr w1, [x0]\n",
+              curr_tac->res->text, curr_tac->res->text);
+      break;
+
+    case TAC_AND:
+      standardTwoVars(fout, curr_tac, "TAC_AND");
+      fprintf(fout,
+              "\n\tand w1, w1, w0\n"
+              "\tadrp x0, _%s@PAGE\n"
+              "\tadd x0, x0, _%s@PAGEOFF\n"
+              "\tstr w1, [x0]\n",
+              curr_tac->res->text, curr_tac->res->text);
+      break;
+
+    case TAC_OR:
+      standardTwoVars(fout, curr_tac, "TAC_OR");
+      fprintf(fout,
+              "\n\torr w1, w1, w0\n"
+              "\tadrp x0, _%s@PAGE\n"
+              "\tadd x0, x0, _%s@PAGEOFF\n"
+              "\tstr w1, [x0]\n",
+              curr_tac->res->text, curr_tac->res->text);
+      break;
+    case TAC_NOT:
+      fprintf(fout,
+              "\n\tadrp x0, _%s@PAGE\n"
+              "\tadd x0, x0, _%s@PAGEOFF\n"
+              "\tldr w1, [x0]\n"
+              "\teor w1, w1, 1\n"
+              "\tadrp x0, _%s@PAGE\n"
+              "\tadd x0, x0, _%s@PAGEOFF\n"
+              "\tstr w1, [x0]\n",
+              curr_tac->op1->text, curr_tac->op1->text, curr_tac->res->text,
+              curr_tac->res->text);
+      break;
+
+    case TAC_IFZ:
+      fprintf(fout,
+              "\n\tadrp x0, _%s@PAGE\n"
+              "\tadd x0, x0, _%s@PAGEOFF\n"
+              "\tldr w1, [x0]\n"
+              "\tcmp w1, 0\n"
+              "\tbeq %s\n",
+              curr_tac->op1->text, curr_tac->op1->text, curr_tac->res->text);
       break;
     }
   }
