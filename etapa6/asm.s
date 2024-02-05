@@ -64,6 +64,131 @@ _1a:
 _i:
 	.word 1
 
+	.globl _v
+	.data
+	.align 2
+_v:
+	.byte 97
+	.word 0
+	.byte 98
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+
+	.globl _matrix
+	.data
+	.align 2
+_matrix:
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+
+	.globl _mf
+	.data
+	.align 2
+_mf:
+
 	.globl __TTemP2
 	.data
 	.align 2
@@ -86,6 +211,12 @@ __TTemP4:
 	.data
 	.align 2
 __TTemP5:
+	.word 0
+
+	.globl __TTemP6
+	.data
+	.align 2
+__TTemP6:
 	.word 0
 
 	.globl __TTemP0
@@ -290,8 +421,16 @@ _function1:
 FBEGIN_function1:
 	stp	x29, x30, [sp, -16]!
 	mov	x29, sp
+	mov w0, 1
 
-	 mov w0, 42 ; TAC_RET
+	add w1, w1, w0
+	adrp x0, __TTemP6@PAGE
+	add x0, x0, __TTemP6@PAGEOFF
+	str w1, [x0]
+
+	adrp x0, __TTemP6@PAGE ; TAC_RET
+	add x0, x0, __TTemP6@PAGEOFF
+	ldr w0, [x0]
 	ldp x29, x30, [sp], 16 
 	ret
 

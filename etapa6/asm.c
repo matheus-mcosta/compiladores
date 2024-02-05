@@ -38,6 +38,35 @@ void writeDeclarations(FILE *fout, AST_NODE *ast) {
     }
 
     break;
+
+  case AST_VECTORD:
+    fprintf(fout,
+            "\n\t.globl _%s\n"
+            "\t.data\n"
+            "\t.align 2\n"
+            "_%s:\n",
+            ast->symbol->text, ast->symbol->text);
+
+    for (i = 0; i < atoi(ast->son[1]->symbol->text); i++) {
+      fprintf(fout, "\t.word 0\n");
+    }
+
+    break;
+  case AST_VECTORD2:
+    fprintf(fout,
+            "\n\t.globl _%s\n"
+            "\t.data\n"
+            "\t.align 2\n"
+            "_%s:\n",
+            ast->symbol->text, ast->symbol->text);
+    for (AST_NODE *aux = ast->son[2]; aux; aux = aux->son[1]) {
+      if (aux->son[0]->symbol->datatype == DATATYPE_INT) {
+        fprintf(fout, "\t.word %s\n", aux->son[0]->symbol->text);
+      } else if (aux->son[0]->symbol->datatype == DATATYPE_CHAR) {
+        fprintf(fout, "\t.byte %d\n", aux->son[0]->symbol->text[1]);
+      }
+    }
+    break;
   }
 
   for (i = 0; i < MAX_SONS; ++i)
@@ -116,6 +145,8 @@ FILE *standardTwoVars(FILE *fout, TAC *tac, char *comment) {
 }
 
 void writeTACS(FILE *fout, TAC *tacs) {
+
+  int arg_count = 0;
   TAC *curr_tac;
 
   for (curr_tac = tacs; curr_tac; curr_tac = curr_tac->next) {
@@ -389,7 +420,7 @@ void writeTACS(FILE *fout, TAC *tacs) {
               curr_tac->op1->text, curr_tac->op1->text, curr_tac->res->text);
       break;
 
-    case TAC_CALL: // TODO
+    case TAC_CALL:
 
       fprintf(fout,
               "\tbl _%s\n"
@@ -398,6 +429,10 @@ void writeTACS(FILE *fout, TAC *tacs) {
               "\tadd x0, x0, _%s@PAGEOFF\n"
               "\tstr w1, [x0]\n",
               curr_tac->op1->text, curr_tac->res->text, curr_tac->res->text);
+      break;
+
+    case TAC_ARG: // TODO
+
       break;
     }
   }

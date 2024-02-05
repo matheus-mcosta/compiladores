@@ -10,8 +10,8 @@ float mf[3] 1.1 2.2 3.3;
 float f=2.5;
 float b=2.5;
 int main();
-float incn (int dd, int n );
-int function1();
+float incn (int dd, int ddd );
+int function1(int n);
 code main{
   if (i==2)
     {
@@ -21,6 +21,8 @@ code main{
         print "OK!\n";
     }
 
+    v[1] = 2;
+
 
     while (i<10)
     {
@@ -29,10 +31,10 @@ code main{
     }
 
     print "Chamando funcao\n";
-    a = function1();
+    a = function1(i);
     print a;
 
-    print function1();
+    print function1(i);
 
 
     1a = 2;
@@ -51,5 +53,5 @@ code incn
 
 code function1
 {
-    return 42;
+    return n + 1;
 }
