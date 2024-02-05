@@ -24,7 +24,9 @@ else
 print "OK!\n";
 }v[ 0] =  0;
 v[ 1] =  2;
-v[ 2] =  4;
+v[ 4 -  1 -  v[ 0]] =  6666;
+a =  v[ 3];
+print a;
 while( i< 10)
 {
 print i;

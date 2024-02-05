@@ -264,34 +264,95 @@ void writeTACS(FILE *fout, TAC *tacs) {
                 curr_tac->op1->text, curr_tac->op1->text, curr_tac->res->text,
                 curr_tac->res->text);
       }
-
       break;
+
+      // TODO: Add support for vector index expr
+
+    case TAC_VEC: {
+      fprintf(stderr, "type: %s\n", curr_tac->op2->text);
+
+      int offset = atoi(curr_tac->op2->text) * 4;
+      if (curr_tac->op2->type == SYMBOL_LIT_INT) {
+        fprintf(fout,
+                "\n\tadrp x0, _%s@PAGE ; TAC_MOVE\n"
+                "\tadd x0, x0, _%s@PAGEOFF\n"
+                "\tldr w1, [x0, %d]\n"
+                "\tadrp x0, _%s@PAGE\n"
+                "\tadd x0, x0, _%s@PAGEOFF\n"
+                "\tstr w1, [x0]\n",
+                curr_tac->op1->text, curr_tac->op1->text, offset,
+                curr_tac->res->text, curr_tac->res->text);
+      } else if (curr_tac->op2->type == SYMBOL_SCALAR) {
+        fprintf(fout,
+                "\n\tadrp x0, _%s@PAGE ; TAC_MOVE\n"
+                "\tadd x0, x0, _%s@PAGEOFF\n"
+                "\tldr w1, [x0, %d]\n"
+                "\tadrp x0, _%s@PAGE\n"
+                "\tadd x0, x0, _%s@PAGEOFF\n"
+                "\tstr w1, [x0]\n",
+                curr_tac->op1->text, curr_tac->op1->text, offset,
+                curr_tac->res->text, curr_tac->res->text);
+      }
+    }
+
+    break;
     case TAC_VECATTR:
 
     {
-      int offset = atoi(curr_tac->op2->text) * 4;
+      if (curr_tac->op2->type == SYMBOL_LIT_INT) {
+        int offset = atoi(curr_tac->op2->text) * 4;
 
-      if (curr_tac->op1->type == SYMBOL_LIT_INT) {
-        fprintf(fout,
-                "\n\tadrp x0, _%s@PAGE ; TAC_VECATTR\n"
-                "\tadd x0, x0, _%s@PAGEOFF\n"
-                "\tmov w1, %s\n"
-                "\tstr w1, [x0, %d]\n",
-                curr_tac->res->text, curr_tac->res->text, curr_tac->op1->text,
-                offset);
-      } else {
+        if (curr_tac->op1->type == SYMBOL_LIT_INT) {
+          fprintf(fout,
+                  "\n\tadrp x0, _%s@PAGE ; TAC_VECATTR\n"
+                  "\tadd x0, x0, _%s@PAGEOFF\n"
+                  "\tmov w1, %s\n"
+                  "\tstr w1, [x0, %d]\n",
+                  curr_tac->res->text, curr_tac->res->text, curr_tac->op1->text,
+                  offset);
+        } else {
 
-        fprintf(fout,
-                "\n\tadrp x0, _%s@PAGE ; TAC_VECATTR\n"
-                "\tadd x0, x0, _%s@PAGEOFF\n"
-                "\tldr w1, [x0]\n"
-                "\tadrp x0, _%s@PAGE\n"
-                "\tadd x0, x0, _%s@PAGEOFF\n"
-                "\tstr w1, [x0, %d]\n",
-                curr_tac->op1->text, curr_tac->op1->text, curr_tac->res->text,
-                curr_tac->res->text, offset);
+          fprintf(fout,
+                  "\n\tadrp x0, _%s@PAGE ; TAC_VECATTR\n"
+                  "\tadd x0, x0, _%s@PAGEOFF\n"
+                  "\tldr w1, [x0]\n"
+                  "\tadrp x0, _%s@PAGE\n"
+                  "\tadd x0, x0, _%s@PAGEOFF\n"
+                  "\tstr w1, [x0, %d]\n",
+                  curr_tac->op1->text, curr_tac->op1->text, curr_tac->res->text,
+                  curr_tac->res->text, offset);
+        }
+      } else if (curr_tac->op2->type == SYMBOL_SCALAR) {
+        if (curr_tac->op1->type == SYMBOL_LIT_INT) {
+          fprintf(fout,
+                  "\n\tadrp x0, _%s@PAGE ; TAC_VECATTR\n"
+                  "\tadd x0, x0, _%s@PAGEOFF\n"
+                  "\tldr w1, [x0]\n"
+                  "\tadrp x0, _%s@PAGE\n"
+                  "\tadd x0, x0, _%s@PAGEOFF\n"
+                  "\tsxtw x1, w1\n"
+                  "\tmov w2, %s\n"
+                  "\tstr w2, [x0, x1, lsl 2]\n",
+                  curr_tac->op2->text, curr_tac->op2->text, curr_tac->res->text,
+                  curr_tac->res->text, curr_tac->op1->text);
+        } else {
+
+          fprintf(fout,
+                  "\n\tadrp x0, _%s@PAGE ; TAC_VECATTR\n"
+                  "\tadd x0, x0, _%s@PAGEOFF\n"
+                  "\tldr w1, [x0]\n"
+                  "\tadrp x0, _%s@PAGE\n"
+                  "\tadd x0, x0, _%s@PAGEOFF\n"
+                  "\tldr w2, [x0]\n"
+                  "\tadrp x0, _%s@PAGE\n"
+                  "\tadd x0, x0, _%s@PAGEOFF\n"
+                  "\tsxtw x1, w1\n"
+                  "\tstr w2, [x0, x1, lsl 2]\n",
+                  curr_tac->op2->text, curr_tac->op2->text, curr_tac->op1->text,
+                  curr_tac->op1->text, curr_tac->res->text,
+                  curr_tac->res->text);
+        }
       }
-
     } break;
     case TAC_ADD:
 
