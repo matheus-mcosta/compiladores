@@ -22,12 +22,6 @@ lC2:
 	.ascii "OK!\n\0"
 	.text
 
-	.cstring
-	.align  3
-lC5:
-	.ascii "Chamando funcao\n\0"
-	.text
-
 	.globl _a
 	.data
 	.align 2
@@ -189,6 +183,12 @@ _matrix:
 	.align 2
 _mf:
 
+	.globl __TTemP11
+	.data
+	.align 2
+__TTemP11:
+	.word 0
+
 	.globl __TTemP10
 	.data
 	.align 2
@@ -296,7 +296,7 @@ _LLabeL1:
 
 	adrp x0, _v@PAGE ; TAC_VECATTR
 	add x0, x0, _v@PAGEOFF
-	mov w1, 0
+	mov w1, 50
 	str w1, [x0, 0]
 
 	adrp x0, _v@PAGE ; TAC_VECATTR
@@ -304,7 +304,7 @@ _LLabeL1:
 	mov w1, 2
 	str w1, [x0, 4]
 
-	mov w1, 4 ; TAC_SUB
+	mov w1, 3 ; TAC_SUB
 	mov w0, 1
 
 	sub w1, w1, w0
@@ -312,18 +312,21 @@ _LLabeL1:
 	add x0, x0, __TTemP1@PAGEOFF
 	str w1, [x0]
 
-	adrp x0, _v@PAGE ; TAC_MOVE
-	add x0, x0, _v@PAGEOFF
-	ldr w1, [x0, 0]
+	adrp x0, __TTemP1@PAGE ; TAC_ADD
+	add x0, x0, __TTemP1@PAGEOFF
+	ldr w1, [x0]
+	mov w0, 1
+
+	add w1, w1, w0
 	adrp x0, __TTemP2@PAGE
 	add x0, x0, __TTemP2@PAGEOFF
 	str w1, [x0]
 
-	adrp x0, __TTemP1@PAGE ; TAC_SUB
-	add x0, x0, __TTemP1@PAGEOFF
-	ldr w1, [x0]
-	adrp x0, __TTemP2@PAGE
+	adrp x0, __TTemP2@PAGE ; TAC_SUB
 	add x0, x0, __TTemP2@PAGEOFF
+	ldr w1, [x0]
+	adrp x0, _i@PAGE
+	add x0, x0, _i@PAGEOFF
 	ldr w0, [x0]
 
 	sub w1, w1, w0
@@ -337,18 +340,59 @@ _LLabeL1:
 	adrp x0, _v@PAGE
 	add x0, x0, _v@PAGEOFF
 	sxtw x1, w1
-	mov w2, 6666
+	mov w2, 6222
 	str w2, [x0, x1, lsl 2]
 
-	adrp x0, _v@PAGE ; TAC_MOVE
-	add x0, x0, _v@PAGEOFF
-	ldr w1, [x0, 12]
+	mov w1, 3 ; TAC_SUB
+	mov w0, 1
+
+	sub w1, w1, w0
 	adrp x0, __TTemP4@PAGE
 	add x0, x0, __TTemP4@PAGEOFF
 	str w1, [x0]
 
-	adrp x0, __TTemP4@PAGE ; TAC_MOVE
+	adrp x0, __TTemP4@PAGE ; TAC_SUB
 	add x0, x0, __TTemP4@PAGEOFF
+	ldr w1, [x0]
+	mov w0, 2
+
+	sub w1, w1, w0
+	adrp x0, __TTemP5@PAGE
+	add x0, x0, __TTemP5@PAGEOFF
+	str w1, [x0]
+
+	adrp x0, _v@PAGE ; TAC_MOVE
+	add x0, x0, _v@PAGEOFF
+	ldr w1, [x0, 4]
+	adrp x0, __TTemP6@PAGE
+	add x0, x0, __TTemP6@PAGEOFF
+	str w1, [x0]
+
+	adrp x0, __TTemP5@PAGE ; TAC_ADD
+	add x0, x0, __TTemP5@PAGEOFF
+	ldr w1, [x0]
+	adrp x0, __TTemP6@PAGE
+	add x0, x0, __TTemP6@PAGEOFF
+	ldr w0, [x0]
+
+	add w1, w1, w0
+	adrp x0, __TTemP7@PAGE
+	add x0, x0, __TTemP7@PAGEOFF
+	str w1, [x0]
+
+	adrp x0, __TTemP7@PAGE ; TAC_MOVE
+	add x0, x0, __TTemP7@PAGEOFF
+	ldr w1, [x0]
+	adrp x0, _v@PAGE
+	add x0, x0, _v@PAGEOFF
+	sxtw x1, w1
+	ldr w1, [x0, x1, lsl 2]
+	adrp x0, __TTemP8@PAGE
+	add x0, x0, __TTemP8@PAGEOFF
+	str w1, [x0]
+
+	adrp x0, __TTemP8@PAGE ; TAC_MOVE
+	add x0, x0, __TTemP8@PAGEOFF
 	ldr w1, [x0]
 	adrp x0, _a@PAGE
 	add x0, x0, _a@PAGEOFF
@@ -371,12 +415,12 @@ _LLabeL2:
 
 	cmp w1, w0
 	cset w1, lt
-	adrp x0, __TTemP5@PAGE
-	add x0, x0, __TTemP5@PAGEOFF
+	adrp x0, __TTemP9@PAGE
+	add x0, x0, __TTemP9@PAGEOFF
 	str w1, [x0]
 
-	adrp x0, __TTemP5@PAGE
-	add x0, x0, __TTemP5@PAGEOFF
+	adrp x0, __TTemP9@PAGE
+	add x0, x0, __TTemP9@PAGEOFF
 	ldr w1, [x0]
 	cmp w1, 0
 	beq _LLabeL3
@@ -395,12 +439,12 @@ _LLabeL2:
 	mov w0, 1
 
 	add w1, w1, w0
-	adrp x0, __TTemP6@PAGE
-	add x0, x0, __TTemP6@PAGEOFF
+	adrp x0, __TTemP10@PAGE
+	add x0, x0, __TTemP10@PAGEOFF
 	str w1, [x0]
 
-	adrp x0, __TTemP6@PAGE ; TAC_MOVE
-	add x0, x0, __TTemP6@PAGEOFF
+	adrp x0, __TTemP10@PAGE ; TAC_MOVE
+	add x0, x0, __TTemP10@PAGEOFF
 	ldr w1, [x0]
 	adrp x0, _i@PAGE
 	add x0, x0, _i@PAGEOFF
@@ -409,82 +453,6 @@ _LLabeL2:
 	b _LLabeL2 ; TAC_JUMP
 
 _LLabeL3:
-
-	adrp x0, lC5@PAGE ; TAC_PRINT STRING
-	add x0, x0, lC5@PAGEOFF
-	bl _printf
-	bl _function1
-	mov w1, w0
-	adrp x0, __TTemP7@PAGE
-	add x0, x0, __TTemP7@PAGEOFF
-	str w1, [x0]
-
-	adrp x0, __TTemP7@PAGE ; TAC_MOVE
-	add x0, x0, __TTemP7@PAGEOFF
-	ldr w1, [x0]
-	adrp x0, _a@PAGE
-	add x0, x0, _a@PAGEOFF
-	str w1, [x0]
-
-	adrp x0, _a@PAGE ; TAC_PRINT INT
-	add x0, x0, _a@PAGEOFF
-	ldr w0, [x0]
-	str w0, [sp]
-	adrp x0, lC0@PAGE
-	add x0, x0, lC0@PAGEOFF
-	bl _printf
-	bl _function1
-	mov w1, w0
-	adrp x0, __TTemP8@PAGE
-	add x0, x0, __TTemP8@PAGEOFF
-	str w1, [x0]
-
-	adrp x0, __TTemP8@PAGE ; TAC_PRINT INT
-	add x0, x0, __TTemP8@PAGEOFF
-	ldr w0, [x0]
-	str w0, [sp]
-	adrp x0, lC0@PAGE
-	add x0, x0, lC0@PAGEOFF
-	bl _printf
-
-	adrp x0, _1a@PAGE ; TAC_MOVE
-	add x0, x0, _1a@PAGEOFF
-	mov w1, 2
-	str w1, [x0]
-
-	adrp x0, _1a@PAGE ; TAC_PRINT INT
-	add x0, x0, _1a@PAGEOFF
-	ldr w0, [x0]
-	str w0, [sp]
-	adrp x0, lC0@PAGE
-	add x0, x0, lC0@PAGEOFF
-	bl _printf
-
- 	adrp x0, __TTemP9@PAGE ; TAC_READ
-	add x0, x0, __TTemP9@PAGEOFF
-	str x0, [sp]
-	adrp x0, lCReAD@PAGE
-	add x0, x0, lCReAD@PAGEOFF
-	bl _scanf
-
-	adrp x0, __TTemP9@PAGE ; TAC_MOVE
-	add x0, x0, __TTemP9@PAGEOFF
-	ldr w1, [x0]
-	adrp x0, _1a@PAGE
-	add x0, x0, _1a@PAGEOFF
-	str w1, [x0]
-
-	adrp x0, _1a@PAGE ; TAC_PRINT INT
-	add x0, x0, _1a@PAGEOFF
-	ldr w0, [x0]
-	str w0, [sp]
-	adrp x0, lC0@PAGE
-	add x0, x0, lC0@PAGEOFF
-	bl _printf
-
-	 mov w0, 2 ; TAC_RET
-	ldp x29, x30, [sp], 16 
-	ret
 
 	 mov w0, 0 ; TAC_RET
 	ldp x29, x30, [sp], 16 
@@ -516,12 +484,12 @@ FBEGIN_function1:
 	mov w0, 1
 
 	add w1, w1, w0
-	adrp x0, __TTemP10@PAGE
-	add x0, x0, __TTemP10@PAGEOFF
+	adrp x0, __TTemP11@PAGE
+	add x0, x0, __TTemP11@PAGEOFF
 	str w1, [x0]
 
-	adrp x0, __TTemP10@PAGE ; TAC_RET
-	add x0, x0, __TTemP10@PAGEOFF
+	adrp x0, __TTemP11@PAGE ; TAC_RET
+	add x0, x0, __TTemP11@PAGEOFF
 	ldr w0, [x0]
 	ldp x29, x30, [sp], 16 
 	ret

@@ -271,8 +271,8 @@ void writeTACS(FILE *fout, TAC *tacs) {
     case TAC_VEC: {
       fprintf(stderr, "type: %s\n", curr_tac->op2->text);
 
-      int offset = atoi(curr_tac->op2->text) * 4;
       if (curr_tac->op2->type == SYMBOL_LIT_INT) {
+        int offset = atoi(curr_tac->op2->text) * 4;
         fprintf(fout,
                 "\n\tadrp x0, _%s@PAGE ; TAC_MOVE\n"
                 "\tadd x0, x0, _%s@PAGEOFF\n"
@@ -283,15 +283,29 @@ void writeTACS(FILE *fout, TAC *tacs) {
                 curr_tac->op1->text, curr_tac->op1->text, offset,
                 curr_tac->res->text, curr_tac->res->text);
       } else if (curr_tac->op2->type == SYMBOL_SCALAR) {
+        // adrp	x0, _b@PAGE
+        // add	x0, x0, _b@PAGEOFF;momd
+        // ldr	w1, [x0]
+        // adrp	x0, _v@PAGE
+        // add	x0, x0, _v@PAGEOFF;momd
+        // sxtw	x1, w1
+        // ldr	w1, [x0, x1, lsl 2]
+        // adrp	x0, _a@PAGE
+        // add	x0, x0, _a@PAGEOFF;momd
+        // str	w1, [x0]
         fprintf(fout,
                 "\n\tadrp x0, _%s@PAGE ; TAC_MOVE\n"
                 "\tadd x0, x0, _%s@PAGEOFF\n"
-                "\tldr w1, [x0, %d]\n"
+                "\tldr w1, [x0]\n"
+                "\tadrp x0, _%s@PAGE\n"
+                "\tadd x0, x0, _%s@PAGEOFF\n"
+                "\tsxtw x1, w1\n"
+                "\tldr w1, [x0, x1, lsl 2]\n"
                 "\tadrp x0, _%s@PAGE\n"
                 "\tadd x0, x0, _%s@PAGEOFF\n"
                 "\tstr w1, [x0]\n",
-                curr_tac->op1->text, curr_tac->op1->text, offset,
-                curr_tac->res->text, curr_tac->res->text);
+                curr_tac->op2->text, curr_tac->op2->text, curr_tac->op1->text,
+                curr_tac->op1->text, curr_tac->res->text, curr_tac->res->text);
       }
     }
 

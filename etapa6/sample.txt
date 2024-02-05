@@ -21,11 +21,11 @@ code main{
         print "OK!\n";
     }
 
-    v[0] = 0;
+    v[0] = 50;
     v[1] = 2;
-    v[4-1-v[0]] = 6666;
+    v[3-1+1-i] = 6222;
 
-    a = v[3];
+    a = v[3-1-2+v[1]];
     print a;
 
 
@@ -34,20 +34,6 @@ code main{
     print i;
     i = i + 1;
     }
-
-    print "Chamando funcao\n";
-    a = function1(i);
-    print a;
-
-    print function1(i);
-
-
-    1a = 2;
-    print 1a;
-    1a = input(int);
-    print 1a;
-
-    return 2;
 
    return 0;
   }
