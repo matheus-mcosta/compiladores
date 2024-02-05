@@ -15,14 +15,23 @@ int  function1();
 
 code main
 {
-if ( i== 1)
+if ( i== 2)
 {
 print "Nao tem como isso...\n";
 }
 else
 {
 print "OK!\n";
-}1a =  0;
+}while( i< 10)
+{
+print i;
+i =  i +  1;
+}
+print "Chamando funcao\n";
+a = function1();
+print a;
+printfunction1();
+1a =  2;
 print 1a;
 1a = input(int );
 print 1a;
@@ -32,4 +41,8 @@ return  0;
 code incn
 {
 return  1.1;
+}
+code function1
+{
+return  42;
 }

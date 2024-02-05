@@ -388,6 +388,17 @@ void writeTACS(FILE *fout, TAC *tacs) {
               "\tbeq %s\n",
               curr_tac->op1->text, curr_tac->op1->text, curr_tac->res->text);
       break;
+
+    case TAC_CALL: // TODO
+
+      fprintf(fout,
+              "\tbl _%s\n"
+              "\tmov w1, w0\n"
+              "\tadrp x0, _%s@PAGE\n"
+              "\tadd x0, x0, _%s@PAGEOFF\n"
+              "\tstr w1, [x0]\n",
+              curr_tac->op1->text, curr_tac->res->text, curr_tac->res->text);
+      break;
     }
   }
 }
