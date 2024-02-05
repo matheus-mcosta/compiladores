@@ -266,6 +266,33 @@ void writeTACS(FILE *fout, TAC *tacs) {
       }
 
       break;
+    case TAC_VECATTR:
+
+    {
+      int offset = atoi(curr_tac->op2->text) * 4;
+
+      if (curr_tac->op1->type == SYMBOL_LIT_INT) {
+        fprintf(fout,
+                "\n\tadrp x0, _%s@PAGE ; TAC_VECATTR\n"
+                "\tadd x0, x0, _%s@PAGEOFF\n"
+                "\tmov w1, %s\n"
+                "\tstr w1, [x0, %d]\n",
+                curr_tac->res->text, curr_tac->res->text, curr_tac->op1->text,
+                offset);
+      } else {
+
+        fprintf(fout,
+                "\n\tadrp x0, _%s@PAGE ; TAC_VECATTR\n"
+                "\tadd x0, x0, _%s@PAGEOFF\n"
+                "\tldr w1, [x0]\n"
+                "\tadrp x0, _%s@PAGE\n"
+                "\tadd x0, x0, _%s@PAGEOFF\n"
+                "\tstr w1, [x0, %d]\n",
+                curr_tac->op1->text, curr_tac->op1->text, curr_tac->res->text,
+                curr_tac->res->text, offset);
+      }
+
+    } break;
     case TAC_ADD:
 
       standardTwoVars(fout, curr_tac, "TAC_ADD");

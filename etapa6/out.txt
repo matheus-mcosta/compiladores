@@ -22,7 +22,9 @@ print "Nao tem como isso...\n";
 else
 {
 print "OK!\n";
-}v[ 1] =  2;
+}v[ 0] =  0;
+v[ 1] =  2;
+v[ 2] =  4;
 while( i< 10)
 {
 print i;

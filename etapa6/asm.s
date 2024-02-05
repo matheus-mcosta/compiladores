@@ -270,6 +270,21 @@ _LLabeL0:
 
 _LLabeL1:
 
+	adrp x0, _v@PAGE ; TAC_VECATTR
+	add x0, x0, _v@PAGEOFF
+	mov w1, 0
+	str w1, [x0, 0]
+
+	adrp x0, _v@PAGE ; TAC_VECATTR
+	add x0, x0, _v@PAGEOFF
+	mov w1, 2
+	str w1, [x0, 4]
+
+	adrp x0, _v@PAGE ; TAC_VECATTR
+	add x0, x0, _v@PAGEOFF
+	mov w1, 4
+	str w1, [x0, 8]
+
 _LLabeL2:
 
 	adrp x0, _i@PAGE ; TAC_LESS
