@@ -13,7 +13,7 @@ lC0:
 	.cstring
 	.align  3
 lC1:
-	.ascii "Atribuicao com vetor [expr]\n\0"
+	.ascii "Atribuicao com vetor [expr] v[1] = 20\n\0"
 	.text
 
 	.cstring
@@ -31,7 +31,7 @@ lC4:
 	.cstring
 	.align  3
 lC6:
-	.ascii "Operacao com vetor\n\0"
+	.ascii "Operacao com vetor     v[1+4*0] = 10;  // v[1] = 10\n\0"
 	.text
 
 	.cstring
@@ -157,6 +157,12 @@ _n:
 _n2:
 	.word 0
 
+	.globl _n3
+	.data
+	.align 2
+_n3:
+	.word 0
+
 	.globl __TTemP11
 	.data
 	.align 2
@@ -209,6 +215,12 @@ __TTemP24:
 	.data
 	.align 2
 __TTemP4:
+	.word 0
+
+	.globl __TTemP25
+	.data
+	.align 2
+__TTemP25:
 	.word 0
 
 	.globl __TTemP5
@@ -368,8 +380,9 @@ FBEGIN_main:
 	adrp x0, lC3@PAGE ; TAC_PRINT STRING
 	add x0, x0, lC3@PAGEOFF
 	bl _printf
-	mov w0, 2
-	mov w1, 1
+	mov w0, 1
+	mov w1, 2
+	mov w2, 1
 	bl _add ; TAC_CALL
 	mov w1, w0
 	adrp x0, __TTemP3@PAGE
@@ -796,8 +809,17 @@ FBEGIN_add:
 	add x0, x0, __TTemP24@PAGEOFF
 	str w1, [x0]
 
-	adrp x0, __TTemP24@PAGE ; TAC_RET
+	adrp x0, __TTemP24@PAGE ; TAC_ADD
 	add x0, x0, __TTemP24@PAGEOFF
+	ldr w1, [x0]
+
+	add w1, w1, w0
+	adrp x0, __TTemP25@PAGE
+	add x0, x0, __TTemP25@PAGEOFF
+	str w1, [x0]
+
+	adrp x0, __TTemP25@PAGE ; TAC_RET
+	add x0, x0, __TTemP25@PAGEOFF
 	ldr w0, [x0]
 	ldp x29, x30, [sp], 16
 	ret

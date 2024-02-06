@@ -7,7 +7,7 @@ int main();
 int add(int n, int n2);
 code main{
 
-    print "Atribuicao com vetor [expr]\n";
+    print "Atribuicao com vetor [expr] v[1] = 20\n";
     a = v[0+2-i]; // v[1] = 20
     print a;
 
@@ -18,7 +18,7 @@ code main{
     print i;
 
 
-    print "Operacao com vetor\n";
+    print "Operacao com vetor     v[1+4*0] = 10;  // v[1] = 10\n";
     v[1+4*0] = 10;  // v[1] = 10
 
     b = v[4/2-1]; // b = v[1] = 10
