@@ -1,37 +1,73 @@
 char a=0;
 int 1a='A';
+int b = 0;
 int i=1;
-int v[10] 'a' 0 'b' 0 0 0 0 0 0 0;
+int v[10] 10 20 'b' 0 0 0 0 0 0 0;
 int main();
-int function1(int n, int n2, int n3, int n4);
+int add(int n, int n2);
 code main{
 
-    a = function1(1,2, 3, 4);
-
-    print "a na main\n";
-
-    a = 4;
+    print "Atribuicao com vetor [expr]\n";
+    a = v[0+2-i]; // v[1] = 20
     print a;
 
-   return 0;
+    print "Chamada de funcao add(1,2)\n";
+    i = add(1, 2); // i = 3
+
+    print "resultado 1 + 2 = ";
+    print i;
+
+
+    print "Operacao com vetor\n";
+    v[1+4*0] = 10;  // v[1] = 10
+
+    b = v[4/2-1]; // b = v[1] = 10
+    print "b = ";
+    print b;
+
+    if (b == v[1+4*0]){
+        print "Teste if OK\n";
+    } else {
+        print "Teste else NAO PODE ACONTECER\n";
+    }
+
+    if (~(b == 10)){
+        print "NAO pode\n";
+    } else {
+        print "Not funcionando \n";
+    }
+    a = 0;
+    b = 0;
+
+    if ( (a == 0) & (b == 0) ){
+        print "AND funcionando\n";
+    } else {
+        print "Teste else NAO PODE ACONTECER\n";
+    }
+
+    if ( (a == 0) | (b == 1) ){
+        print "OR funcionando\n";
+    } else {
+        print "Teste else NAO PODE ACONTECER\n";
+    }
+
+    //While
+
+    print "Teste while 0 a 9\n";
+    i = 0;
+    while (i < 10) {
+        print "i = ";
+        print i;
+        i = i + 1;
+    }
+
+   print "Fim do programa\n ";
+
+   1a = 20 * 0;
+   return 1a;
   }
 
-code function1
+code add
 {
-    n = n + a;
-
-    print "n na function1\n";
-
-    print n;
-
-    print "n2 na function1\n";
-    print n2;
-
-    print "n3 na function1\n";
-    print n3;
-
-    print "n4 na function1\n";
-    print n4;
-
-    return n;
+    return n + n2;
 }

@@ -212,6 +212,7 @@ void writeTACS(FILE *fout, TAC *tacs) {
                 "\n\tadrp x0, _%s@PAGE ; TAC_RET\n"
                 "\tadd x0, x0, _%s@PAGEOFF\n"
                 "\tldr w0, [x0]\n"
+                "\tldp x29, x30, [sp], 16\n"
                 "\tret\n",
                 curr_tac->res->text, curr_tac->res->text);
       }
@@ -227,7 +228,6 @@ void writeTACS(FILE *fout, TAC *tacs) {
 
     case TAC_PRINT:
 
-      fprintf(stderr, "TYPE: %d\n", curr_tac->res->datatype);
       if (curr_tac->res->datatype == DATATYPE_INT ||
           curr_tac->res->datatype == DATATYPE_CHAR) {
         fprintf(fout,
@@ -288,7 +288,6 @@ void writeTACS(FILE *fout, TAC *tacs) {
       // TODO: Add support for vector index expr
 
     case TAC_VEC: {
-      fprintf(stderr, "type: %s\n", curr_tac->op2->text);
 
       if (curr_tac->op2->type == SYMBOL_LIT_INT) {
         int offset = atoi(curr_tac->op2->text) * 4;
@@ -554,6 +553,9 @@ void writeTACS(FILE *fout, TAC *tacs) {
       break;
 
     case TAC_ARG: {
+      if (curr_tac->res->type == SYMBOL_LIT_INT) {
+        fprintf(fout, "\tmov w%d, %s\n", arg_count, curr_tac->res->text);
+      }
       arg_count++;
 
     } break;
